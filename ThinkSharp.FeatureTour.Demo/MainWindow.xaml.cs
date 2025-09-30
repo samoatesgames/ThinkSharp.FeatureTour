@@ -15,55 +15,58 @@ namespace ThinkSharp.FeatureTouring
 
             DataContext = MainWindowViewModel.Instance;
 
-            myTbResult.TextChanged += TbResultTextChanged;
-            myTbPath.TextChanged += TbPathTextChanged;
-            myCbOptions.SelectionChanged += CbOptionsSelectionChanged;
+            MyTbResult.TextChanged += TbResultTextChanged;
+            MyTbPath.TextChanged += TbPathTextChanged;
+            MyCbOptions.SelectionChanged += CbOptionsSelectionChanged;
 
             var navigator = FeatureTour.GetNavigator();
 
-            navigator.OnStepEntering(ElementID.Rectangle).Execute(s =>
+            navigator.OnStepEntering(ElementId.Rectangle).Execute(s =>
             {
-                (DataContext as MainWindowViewModel).Placement = (Placement) s.Tag;
+                if (DataContext is MainWindowViewModel mainWindowViewModel)
+                {
+                    mainWindowViewModel.Placement = (Placement)s.Tag;
+                }
                 TabControl.SelectedIndex = 0;
 
             });
-            navigator.OnStepEntering(ElementID.TextBoxResult).Execute(s => TabControl.SelectedIndex = 1);
-            navigator.OnStepEntering(ElementID.ButtonPushMe).Execute(s => TabControl.SelectedIndex = 2);
-            navigator.OnStepEntering(ElementID.CustomView).Execute(s => TabControl.SelectedIndex = 3);
+            navigator.OnStepEntering(ElementId.TextBoxResult).Execute(_ => TabControl.SelectedIndex = 1);
+            navigator.OnStepEntering(ElementId.ButtonPushMe).Execute(_ => TabControl.SelectedIndex = 2);
+            navigator.OnStepEntering(ElementId.CustomView).Execute(_ => TabControl.SelectedIndex = 3);
 
-            navigator.OnStepEntered(ElementID.TextBoxResult).Execute(s => myTbResult.Focus());
-            navigator.OnStepEntered(ElementID.TextBoxPath).Execute(s => myTbPath.Focus());
-            navigator.OnStepEntered(ElementID.ComboBoxOption).Execute(s => myCbOptions.Focus());
-            navigator.OnStepEntered(ElementID.ButtonClear).Execute(s => myBtnClear.Focus());
+            navigator.OnStepEntered(ElementId.TextBoxResult).Execute(_ => MyTbResult.Focus());
+            navigator.OnStepEntered(ElementId.TextBoxPath).Execute(_ => MyTbPath.Focus());
+            navigator.OnStepEntered(ElementId.ComboBoxOption).Execute(_ => MyCbOptions.Focus());
+            navigator.OnStepEntered(ElementId.ButtonClear).Execute(_ => MyBtnClear.Focus());
         }
 
         private void CbOptionsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (myCbOptions.SelectedIndex == 1)
+            if (MyCbOptions.SelectedIndex == 1)
             {
                 var navigator = FeatureTour.GetNavigator();
-                navigator.IfCurrentStepEquals(ElementID.ComboBoxOption).GoNext();
+                navigator.IfCurrentStepEquals(ElementId.ComboBoxOption).GoNext();
             }
         }
 
         private void TbPathTextChanged(object sender, TextChangedEventArgs e)
         {
-            var path = myTbPath.Text.Trim(' ', '\\');
+            var path = MyTbPath.Text.Trim(' ', '\\');
             var expectedPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop).Trim(' ', '\\');
             if (path.Equals(expectedPath, StringComparison.InvariantCultureIgnoreCase))
             {
                 var navigator = FeatureTour.GetNavigator();
-                navigator.IfCurrentStepEquals(ElementID.TextBoxPath).GoNext();
+                navigator.IfCurrentStepEquals(ElementId.TextBoxPath).GoNext();
             }
         }
 
         private void TbResultTextChanged(object sender, TextChangedEventArgs e)
         {
-            var result = myTbResult.Text.Trim();
+            var result = MyTbResult.Text.Trim();
             if (result == "21")
             {
                 var navigator = FeatureTour.GetNavigator();
-                navigator.IfCurrentStepEquals(ElementID.TextBoxResult).GoNext();
+                navigator.IfCurrentStepEquals(ElementId.TextBoxResult).GoNext();
             }
         }
     }

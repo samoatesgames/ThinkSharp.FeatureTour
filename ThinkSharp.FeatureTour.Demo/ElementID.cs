@@ -3,7 +3,7 @@
 
 namespace ThinkSharp.FeatureTouring
 {
-    public static class ElementID
+    public static class ElementId
     {
         public static readonly string Rectangle = "Rectangle";
         public static readonly string ButtonIntroduction = "ButtonIntroduction";

@@ -7,7 +7,7 @@ namespace ThinkSharp.FeatureTouring.Helper
 {
     internal class DisposableAction : IDisposable
     {
-        private readonly Action myAction;
+        private readonly Action m_myAction;
 
         /// <summary>
         /// </summary>
@@ -15,13 +15,12 @@ namespace ThinkSharp.FeatureTouring.Helper
         /// </param>
         public DisposableAction(Action action)
         {
-            myAction = action;
+            m_myAction = action;
         }
 
         public void Dispose()
         {
-            if (myAction != null)
-                myAction();
+            m_myAction?.Invoke();
         }
     }
 }

@@ -12,18 +12,18 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
     {
         private class Counter
         {
-            public int entered1;
-            public int leaved1;
-            public int entered2;
-            public int leaved2;
-            public int closed;
+            public int Entered1;
+            public int Leaved1;
+            public int Entered2;
+            public int Leaved2;
+            public int Closed;
         }
 
         private class Doable
         {
-            public int do1;
-            public int do2;
-            public int do3;
+            public int Do1;
+            public int Do2;
+            public int Do3;
         }
 
         [TestMethod]
@@ -42,7 +42,7 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
             FeatureTour.SetTourRun(tourRun);
             tourRun.Start();
 
-            var vm = tourRun.GetPrivateField<TourViewModel>("myTourViewModel");
+            var vm = tourRun.GetPrivateField<TourViewModel>("m_myTourViewModel");
 
             Assert.AreEqual(false, vm.HasTourFinished);
             Assert.AreEqual(3, vm.TotalStepsCount);
@@ -80,11 +80,11 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         {
             var c = new Counter();
             var navigator = FeatureTour.GetNavigator();
-            navigator.OnStepEntered("ID1").Execute(s => c.entered1++);
-            navigator.OnStepEntered("ID2").Execute(s => c.entered2++);
-            navigator.OnStepLeft("ID1").Execute(s => c.leaved1++);
-            navigator.OnStepLeft("ID2").Execute(s => c.leaved2++);
-            navigator.OnClosed().Execute(s => c.closed++);
+            navigator.OnStepEntered("ID1").Execute(_ => c.Entered1++);
+            navigator.OnStepEntered("ID2").Execute(_ => c.Entered2++);
+            navigator.OnStepLeft("ID1").Execute(_ => c.Leaved1++);
+            navigator.OnStepLeft("ID2").Execute(_ => c.Leaved2++);
+            navigator.OnClosed().Execute(_ => c.Closed++);
 
             var tour = new Tour();
             tour.Steps =
@@ -115,9 +115,9 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         {
             var d = new Doable();
             var navigator = FeatureTour.GetNavigator();
-            navigator.ForStep("ID1").AttachDoable(s => d.do1++);
-            navigator.ForStep("ID2").AttachDoable(s => d.do2++, s => true);
-            navigator.ForStep("ID3").AttachDoable(s => d.do3++, s => false);
+            navigator.ForStep("ID1").AttachDoable(_ => d.Do1++);
+            navigator.ForStep("ID2").AttachDoable(_ => d.Do2++, _ => true);
+            navigator.ForStep("ID3").AttachDoable(_ => d.Do3++, _ => false);
 
             var tour = new Tour();
             tour.Steps =
@@ -159,18 +159,18 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
 
         private void AssertIsDoable(Doable d, int do1, int do2, int do3)
         {
-            Assert.AreEqual(do1, d.do1);
-            Assert.AreEqual(do2, d.do2);
-            Assert.AreEqual(do3, d.do3);
+            Assert.AreEqual(do1, d.Do1);
+            Assert.AreEqual(do2, d.Do2);
+            Assert.AreEqual(do3, d.Do3);
         }
 
         private void AssertIsCounter(Counter c, int entered1, int leaved1, int entered2, int leaved2, int closed)
         {
-            Assert.AreEqual(entered1, c.entered1, "entered1");
-            Assert.AreEqual(leaved1, c.leaved1, "leaved1");
-            Assert.AreEqual(entered2, c.entered2, "entered2");
-            Assert.AreEqual(leaved2, c.leaved2, "leaved2");
-            Assert.AreEqual(closed, c.closed, "closed");
+            Assert.AreEqual(entered1, c.Entered1, "entered1");
+            Assert.AreEqual(leaved1, c.Leaved1, "leaved1");
+            Assert.AreEqual(entered2, c.Entered2, "entered2");
+            Assert.AreEqual(leaved2, c.Leaved2, "leaved2");
+            Assert.AreEqual(closed, c.Closed, "closed");
         }
     }
 }

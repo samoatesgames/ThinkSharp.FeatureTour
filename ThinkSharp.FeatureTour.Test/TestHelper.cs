@@ -11,7 +11,7 @@ namespace ThinkSharp.FeatureTouring.Test
         {
             BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
             FieldInfo field = instance.GetType().GetField(fieldName, bindFlags);
-            return field.GetValue(instance) as TFieldType;
+            return field?.GetValue(instance) as TFieldType;
         }
     }
 }

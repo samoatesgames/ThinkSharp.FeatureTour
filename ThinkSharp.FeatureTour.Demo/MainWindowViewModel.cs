@@ -13,23 +13,23 @@ namespace ThinkSharp.FeatureTouring
 {
     public class MainWindowViewModel : ObservableObject
     {
-        private ICommand _cmdStartPositioning;
-        private ICommand _cmdStartIntroduction;
-        private ICommand _cmdStartActiveTour;
-        private ICommand _cmdStartDialogTour;
-        private ICommand _cmdStartCustomViewTour;
-        private ICommand _cmdStartOverView;
-        private ICommand _cmdOpenDialog;
-        private ICommand _cmdClear;
-        private Placement _placement;
-        private int _colorSchemaIndex;
-        private int _tabIndex;
-        private string _path;
-        private string _result;
-        private int _selectedIndex;
-        private string _styleText;
+        private ICommand m_cmdStartPositioning;
+        private ICommand m_cmdStartIntroduction;
+        private ICommand m_cmdStartActiveTour;
+        private ICommand m_cmdStartDialogTour;
+        private ICommand m_cmdStartCustomViewTour;
+        private ICommand m_cmdStartOverView;
+        private ICommand m_cmdOpenDialog;
+        private ICommand m_cmdClear;
+        private Placement m_placement;
+        private int m_colorSchemaIndex;
+        private int m_tabIndex;
+        private string m_path;
+        private string m_result;
+        private int m_selectedIndex;
+        private string m_styleText;
 
-        private readonly PopupStyle myPopupStyle = new PopupStyle();
+        private readonly PopupStyle m_myPopupStyle = new PopupStyle();
 
 
         // .ctor
@@ -40,11 +40,11 @@ namespace ThinkSharp.FeatureTouring
 
             var navigator = FeatureTour.GetNavigator();
 
-            navigator.ForStep(ElementID.TextBoxPath).AttachDoable(s => Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-            navigator.ForStep(ElementID.ComboBoxOption).AttachDoable(s => SelectedIndex = 1);
-            navigator.ForStep(ElementID.TextBoxPath).AttachDoable(s => Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            navigator.ForStep(ElementId.TextBoxPath).AttachDoable(_ => Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
+            navigator.ForStep(ElementId.ComboBoxOption).AttachDoable(_ => SelectedIndex = 1);
+            navigator.ForStep(ElementId.TextBoxPath).AttachDoable(_ => Path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
 
-            PopupStyle.PropertyChanged += (s, e) => StyleText = GetStyleText();
+            PopupStyle.PropertyChanged += (_, _) => StyleText = GetStyleText();
             StyleText = GetStyleText();
         }
 
@@ -58,12 +58,12 @@ namespace ThinkSharp.FeatureTouring
             sb.AppendLine("");
             sb.AppendLine("");
             sb.AppendLine("<Style TargetType=\"featureTouringControls: TourControl\">");
-            sb.AppendLine($"    <Setter Property=\"Background\" Value=\"{myPopupStyle.BackgroundColor}\"/>");
-            sb.AppendLine($"    <Setter Property=\"BorderBrush\" Value=\"{myPopupStyle.BorderBrushColor}\"/>");
-            sb.AppendLine($"    <Setter Property=\"Foreground\" Value=\"{myPopupStyle.ForegroundColor}\"/>");
-            sb.AppendLine($"    <Setter Property=\"FontSize\" Value=\"{myPopupStyle.FontSize:0}\"/>");
-            sb.AppendLine($"    <Setter Property=\"CornerRadius\" Value=\"{myPopupStyle.CornerRadius:0}\"/>");
-            sb.AppendLine($"    <Setter Property=\"BorderThickness\" Value=\"{myPopupStyle.BorderThickness.Top:0}\"/>");
+            sb.AppendLine($"    <Setter Property=\"Background\" Value=\"{m_myPopupStyle.BackgroundColor}\"/>");
+            sb.AppendLine($"    <Setter Property=\"BorderBrush\" Value=\"{m_myPopupStyle.BorderBrushColor}\"/>");
+            sb.AppendLine($"    <Setter Property=\"Foreground\" Value=\"{m_myPopupStyle.ForegroundColor}\"/>");
+            sb.AppendLine($"    <Setter Property=\"FontSize\" Value=\"{m_myPopupStyle.FontSize:0}\"/>");
+            sb.AppendLine($"    <Setter Property=\"CornerRadius\" Value=\"{m_myPopupStyle.CornerRadius:0}\"/>");
+            sb.AppendLine($"    <Setter Property=\"BorderThickness\" Value=\"{m_myPopupStyle.BorderThickness.Top:0}\"/>");
             sb.AppendLine("</Style>");
             return sb.ToString();
         }
@@ -77,7 +77,7 @@ namespace ThinkSharp.FeatureTouring
             Path = "";
             SelectedIndex = 0;
             FeatureTour.GetNavigator()
-                .IfCurrentStepEquals(ElementID.ButtonClear)
+                .IfCurrentStepEquals(ElementId.ButtonClear)
                 .Close();
         }
 
@@ -88,11 +88,11 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdStartPositioning == null)
+                if (m_cmdStartPositioning == null)
                 {
-                    _cmdStartPositioning = new RelayCommand(TourStarter.StartPositioning);
+                    m_cmdStartPositioning = new RelayCommand(TourStarter.StartPositioning);
                 }
-                return _cmdStartPositioning;
+                return m_cmdStartPositioning;
             }
         }
         
@@ -100,11 +100,11 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdStartIntroduction == null)
+                if (m_cmdStartIntroduction == null)
                 {
-                    _cmdStartIntroduction = new RelayCommand(TourStarter.StartIntroduction);
+                    m_cmdStartIntroduction = new RelayCommand(TourStarter.StartIntroduction);
                 }
-                return _cmdStartIntroduction;
+                return m_cmdStartIntroduction;
             }
         }
 
@@ -112,11 +112,11 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdStartActiveTour == null)
+                if (m_cmdStartActiveTour == null)
                 {
-                    _cmdStartActiveTour = new RelayCommand(TourStarter.StartActiveTour);
+                    m_cmdStartActiveTour = new RelayCommand(TourStarter.StartActiveTour);
                 }
-                return _cmdStartActiveTour;
+                return m_cmdStartActiveTour;
             }
         }
 
@@ -124,11 +124,11 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdStartDialogTour == null)
+                if (m_cmdStartDialogTour == null)
                 {
-                    _cmdStartDialogTour = new RelayCommand(TourStarter.StartDialogTour);
+                    m_cmdStartDialogTour = new RelayCommand(TourStarter.StartDialogTour);
                 }
-                return _cmdStartDialogTour;
+                return m_cmdStartDialogTour;
             }
         }
 
@@ -136,11 +136,11 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdStartCustomViewTour == null)
+                if (m_cmdStartCustomViewTour == null)
                 {
-                    _cmdStartCustomViewTour = new RelayCommand(TourStarter.StartCustomViewTour);
+                    m_cmdStartCustomViewTour = new RelayCommand(TourStarter.StartCustomViewTour);
                 }
-                return _cmdStartCustomViewTour;
+                return m_cmdStartCustomViewTour;
             }
         }
 
@@ -148,11 +148,11 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdStartOverView == null)
+                if (m_cmdStartOverView == null)
                 {
-                    _cmdStartOverView = new RelayCommand(TourStarter.StartOverView);
+                    m_cmdStartOverView = new RelayCommand(TourStarter.StartOverView);
                 }
-                return _cmdStartOverView;
+                return m_cmdStartOverView;
             }
         }
 
@@ -160,15 +160,15 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdOpenDialog == null)
+                if (m_cmdOpenDialog == null)
                 {
-                    _cmdOpenDialog = new RelayCommand(() =>
+                    m_cmdOpenDialog = new RelayCommand(() =>
                     {
                         var dlg = new Dialog();
                         dlg.ShowDialog();
                     });
                 }
-                return _cmdOpenDialog;
+                return m_cmdOpenDialog;
             }
         }
 
@@ -176,11 +176,11 @@ namespace ThinkSharp.FeatureTouring
         {
             get
             {
-                if (_cmdClear == null)
+                if (m_cmdClear == null)
                 {
-                    _cmdClear = new RelayCommand(Clear);
+                    m_cmdClear = new RelayCommand(Clear);
                 }
-                return _cmdClear;
+                return m_cmdClear;
             }
         }
 
@@ -189,47 +189,47 @@ namespace ThinkSharp.FeatureTouring
 
         public Placement Placement
         {
-            get => _placement;
-            set => SetProperty(ref _placement, value);
+            get => m_placement;
+            set => SetProperty(ref m_placement, value);
         }
         
         public int ColorSchemaIndex
         {
-            get => _colorSchemaIndex;
-            set => SetProperty(ref _colorSchemaIndex, value);
+            get => m_colorSchemaIndex;
+            set => SetProperty(ref m_colorSchemaIndex, value);
         }
 
         public int TabIndex
         {
-            get => _tabIndex;
-            set => SetProperty(ref _tabIndex, value);
+            get => m_tabIndex;
+            set => SetProperty(ref m_tabIndex, value);
         }
 
         public string Path
         {
-            get => _path;
-            set => SetProperty(ref _path, value);
+            get => m_path;
+            set => SetProperty(ref m_path, value);
         }
 
         public string Result
         {
-            get => _result;
-            set => SetProperty(ref _result, value);
+            get => m_result;
+            set => SetProperty(ref m_result, value);
         }
 
         public int SelectedIndex
         {
-            get => _selectedIndex;
-            set => SetProperty(ref _selectedIndex, value);
+            get => m_selectedIndex;
+            set => SetProperty(ref m_selectedIndex, value);
         }
 
         public string StyleText
         {
-            get => _styleText;
-            set => SetProperty(ref _styleText, value);
+            get => m_styleText;
+            set => SetProperty(ref m_styleText, value);
         }
 
-        public PopupStyle PopupStyle => myPopupStyle;
+        public PopupStyle PopupStyle => m_myPopupStyle;
 
         public static MainWindowViewModel Instance { get; } = new MainWindowViewModel();
     }

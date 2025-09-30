@@ -41,7 +41,7 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
             //BindingFlags bindFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
             //FieldInfo field = typeof(TourRun).GetField("myTourViewModel", bindFlags);
             //var vm = field.GetValue(tourRun) as TestTourViewModel;
-            var vm = tourRun.GetPrivateField<TestTourViewModel>("myTourViewModel");
+            var vm = tourRun.GetPrivateField<TestTourViewModel>("m_myTourViewModel");
 
             Assert.IsNotNull(vm, "ViewModel should not be null. Custom view model creation failed.");
         }

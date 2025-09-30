@@ -15,6 +15,9 @@ namespace ThinkSharp.FeatureTouring.Controls
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (parameter == null || value == null)
+                return VerticalAlignment.Bottom;
+
             var border = (BorderSide)parameter;
             var placement = (Placement)value;
             if (placement == Placement.Center ||
@@ -52,6 +55,9 @@ namespace ThinkSharp.FeatureTouring.Controls
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (parameter == null || value == null)
+                return Visibility.Collapsed;
+
             var border = (BorderSide)parameter;
             var placement = (Placement)value;
 

@@ -37,26 +37,26 @@ namespace ThinkSharp.FeatureTouring.Navigation
     }
     internal class TourNavigator : ITourNavigator
     {
-        private readonly ITourRun myRun;
+        private readonly ITourRun m_myRun;
 
         public TourNavigator(ITourRun run)
         {
-            myRun = run;
+            m_myRun = run;
         }
 
         public bool GoNext()
         {
-            return myRun.NextStep(false);
+            return m_myRun.NextStep(false);
         }
 
         public bool GoPrevious()
         {
-            return myRun.PreviousStep();
+            return m_myRun.PreviousStep();
         }
 
         public void Close()
         {
-            myRun.Close();
+            m_myRun.Close();
         }
     }
 }

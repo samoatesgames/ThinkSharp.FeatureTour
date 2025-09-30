@@ -10,8 +10,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
   /// </summary>
   public class RelayCommand : CommandBase
   {
-    private readonly Predicate<Object>  myCanExecute;
-    private readonly Action<Object> myExecute;
+    private readonly Predicate<Object>  m_myCanExecute;
+    private readonly Action<Object> m_myExecute;
 
 
     // .ctor
@@ -26,7 +26,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     ///   The delegate that will be executed.
     /// </param>
     public RelayCommand(Action<Object> execute)
-      : this(execute, o => true)
+      : this(execute, _ => true)
     {
     }
 
@@ -41,9 +41,9 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     /// </param>
     public RelayCommand(Action<Object> execute, Predicate<Object> canExecute)
     {
-        myExecute = execute ?? throw new ArgumentNullException("execute can not be null.");
+        m_myExecute = execute ?? throw new ArgumentNullException(nameof(execute), @"execute can not be null.");
 
-      myCanExecute = canExecute;
+      m_myCanExecute = canExecute;
     }
 
     #endregion
@@ -61,11 +61,11 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     ///   The parameter that contains optional information about the state.
     /// </param>
     /// <returns>
-    ///   true if the command can be execute; otherwise false.
+    ///   true if the command can be executed; otherwise false.
     /// </returns>
     public override Boolean CanExecute(Object parameter)
     {
-        return myCanExecute(parameter);
+        return m_myCanExecute(parameter);
     }
 
     #endregion
@@ -77,11 +77,11 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     ///   Executes the command.
     /// </summary>
     /// <param name="parameter">
-    ///   The parametr that contains optional data.
+    ///   The parameter that contains optional data.
     /// </param>
     protected override void ExecuteInternal(Object parameter)
     {
-      myExecute(parameter);
+      m_myExecute(parameter);
     }
 
     #endregion

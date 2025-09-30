@@ -16,56 +16,56 @@ namespace ThinkSharp.FeatureTouring.Navigation
         /// <summary>
         /// Returns an object providing navigation (next step, previous step, close tour) if the current step has the specified step ID.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID</param>
         /// <returns>
         /// <see cref="ITourNavigator"/> object that provides navigation methods.
         /// </returns>
-        ITourNavigator IfCurrentStepEquals(string stepID);
+        ITourNavigator IfCurrentStepEquals(string stepId);
 
         /// <summary>
         /// Returns an object for attaching doable actions for the specified step ID.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourDoable"/> object for attaching doable action.
         /// </returns>
-        ITourDoable ForStep(string stepID);
+        ITourDoable ForStep(string stepId);
 
         /// <summary>
         /// Returns an object for executing custom logic before the step with the specified step ID was entered.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourExecution"/> object for executing custom logic.
         /// </returns>
-        ITourExecution OnStepEntering(string stepID);
+        ITourExecution OnStepEntering(string stepId);
 
         /// <summary>
         /// Returns an object for executing custom logic after the step with the specified step ID was entered.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourExecution"/> object for executing custom logic.
         /// </returns>
-        ITourExecution OnStepEntered(string stepID);
+        ITourExecution OnStepEntered(string stepId);
 
         /// <summary>
         /// Returns an object for executing custom logic after the step with the specified step ID was left.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourExecution"/> object for executing custom logic.
         /// </returns>
-        ITourExecution OnStepLeft(string stepID);
+        ITourExecution OnStepLeft(string stepId);
 
         /// <summary>
         /// Returns an object for executing custom logic if the tour was closed.
@@ -90,7 +90,7 @@ namespace ThinkSharp.FeatureTouring.Navigation
     /// </summary>
     public class FeatureTour : IFeatureTourNavigator
     {
-        private static ITourRun theCurrentTourRun;
+        private static ITourRun _theCurrentTourRun;
 
         private static readonly ITourNavigator theNullNavigator = new NullTourNavigator();
         private static readonly ITourExecution theNullExecution = new NullTourExecution();
@@ -99,11 +99,11 @@ namespace ThinkSharp.FeatureTouring.Navigation
         private static readonly ActionRepository theExecutionRepository = new ActionRepository();
         private static readonly ActionRepository theDoableRepository = new ActionRepository();
 
-        private const string STEP_ENTERED = "OnStepEnterd";
-        private const string STEP_ENTERING = "OnStepEntering";
-        private const string STEP_LEAVED = "OnStepLeaved";
-        private const string DOABLE = "Doable";
-        private const string CLOSED = "OnClosed";
+        private const string c_stepEntered = "OnStepEnterd";
+        private const string c_stepEntering = "OnStepEntering";
+        private const string c_stepLeaved = "OnStepLeaved";
+        private const string c_doable = "Doable";
+        private const string c_closed = "OnClosed";
 
         internal static Func<ITourRun, TourViewModel> ViewModelFactoryMethod { get; private set; }
 
@@ -135,15 +135,15 @@ namespace ThinkSharp.FeatureTouring.Navigation
         /// <summary>
         /// Returns an object providing navigation (next step, previous step, close tour) if the current step has the specified ste ID.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID</param>
         /// <returns>
         /// <see cref="ITourNavigator"/> object that provides navigation methods.
         /// </returns>
-        public ITourNavigator IfCurrentStepEquals(string stepID)
+        public ITourNavigator IfCurrentStepEquals(string stepId)
         {
-            var currentRun = theCurrentTourRun;
-            if (currentRun == null || currentRun.CurrentStep == null || currentRun.CurrentStep.ID != stepID) 
+            var currentRun = _theCurrentTourRun;
+            if (currentRun == null || currentRun.CurrentStep == null || currentRun.CurrentStep.Id != stepId) 
                 return theNullNavigator;
             return new TourNavigator(currentRun);
         }
@@ -151,65 +151,65 @@ namespace ThinkSharp.FeatureTouring.Navigation
         /// <summary>
         /// Returns an object for attaching doable actions for the specified step ID.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourDoable"/> object for attaching doable action.
         /// </returns>
-        public ITourDoable ForStep(string stepID)
+        public ITourDoable ForStep(string stepId)
         {
-            if (string.IsNullOrEmpty(stepID))
+            if (string.IsNullOrEmpty(stepId))
                 return theNullDoable;
-            return new TourDoable(theDoableRepository, GetName(stepID, DOABLE));
+            return new TourDoable(theDoableRepository, GetName(stepId, c_doable));
         }
 
         /// <summary>
         /// Returns an object for executing custom logic before the step with the specified step ID was entered.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourExecution"/> object for executing custom logic.
         /// </returns>
-        public ITourExecution OnStepEntering(string stepID)
+        public ITourExecution OnStepEntering(string stepId)
         {
-            if (string.IsNullOrEmpty(stepID))
+            if (string.IsNullOrEmpty(stepId))
                 return theNullExecution;
-            return new TourExecution(theExecutionRepository, GetName(stepID, STEP_ENTERING));
+            return new TourExecution(theExecutionRepository, GetName(stepId, c_stepEntering));
         }
 
         /// <summary>
         /// Returns an object for executing custom logic after the step with the specified step ID was entered.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourExecution"/> object for executing custom logic.
         /// </returns>
-        public ITourExecution OnStepEntered(string stepID)
+        public ITourExecution OnStepEntered(string stepId)
         {
-            if (string.IsNullOrEmpty(stepID))
+            if (string.IsNullOrEmpty(stepId))
                 return theNullExecution;
-            return new TourExecution(theExecutionRepository, GetName(stepID, STEP_ENTERED));
+            return new TourExecution(theExecutionRepository, GetName(stepId, c_stepEntered));
         }
 
         /// <summary>
         /// Returns an object for executing custom logic after the step with the specified step ID was left.
         /// </summary>
-        /// <param name="stepID">
+        /// <param name="stepId">
         /// The step ID.
         /// </param>
         /// <returns>
         /// <see cref="ITourExecution"/> object for executing custom logic.
         /// </returns>
-        public ITourExecution OnStepLeft(string stepID)
+        public ITourExecution OnStepLeft(string stepId)
         {
-            if (string.IsNullOrEmpty(stepID))
+            if (string.IsNullOrEmpty(stepId))
                 return theNullExecution;
-            return new TourExecution(theExecutionRepository, GetName(stepID, STEP_LEAVED));
+            return new TourExecution(theExecutionRepository, GetName(stepId, c_stepLeaved));
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace ThinkSharp.FeatureTouring.Navigation
         /// </returns>
         public ITourExecution OnClosed()
         {
-            return new TourExecution(theExecutionRepository, CLOSED);
+            return new TourExecution(theExecutionRepository, c_closed);
         }
         
         /// <summary>
@@ -231,7 +231,7 @@ namespace ThinkSharp.FeatureTouring.Navigation
         /// </returns>
         public bool Close()
         {
-            var currentRun = theCurrentTourRun;
+            var currentRun = _theCurrentTourRun;
             if (currentRun == null) return false;
             currentRun.Close();
             return true;
@@ -243,21 +243,21 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
         internal static bool HasStepEnteringAttached(Step step)
         {
-            return theExecutionRepository.Contains(GetName(step.ID, STEP_ENTERING));
+            return theExecutionRepository.Contains(GetName(step.Id, c_stepEntering));
         }
 
         internal static void SetTourRun(ITourRun run)
         {
-            var currentRun = theCurrentTourRun;
+            var currentRun = _theCurrentTourRun;
             currentRun?.Close();
-            theCurrentTourRun = run;
+            _theCurrentTourRun = run;
         }
 
         internal static Step CurrentStep
         {
             get
             {
-                var currentRun = theCurrentTourRun;
+                var currentRun = _theCurrentTourRun;
                 if (currentRun == null) return null;
                 return currentRun.CurrentStep;
             }
@@ -266,58 +266,58 @@ namespace ThinkSharp.FeatureTouring.Navigation
         internal static void OnStepEntering(Step step)
         {
             if (step == null) return;
-            var name = GetName(step.ID, STEP_ENTERING);
-            Log.Debug("OnStepEntering: '" + name + "'");
+            var name = GetName(step.Id, c_stepEntering);
+            Log.Debug($"OnStepEntering: '{name}'");
             theExecutionRepository.Execute(name, step);
         }
 
         internal static void OnStepEntered(Step step)
         {
             if (step == null) return;
-            var name = GetName(step.ID, STEP_ENTERED);
-            Log.Debug("OnStepEntered: '" + name + "'");
+            var name = GetName(step.Id, c_stepEntered);
+            Log.Debug($"OnStepEntered: '{name}'");
             theExecutionRepository.Execute(name, step);
         }
 
         internal static void OnStepLeaved(Step step)
         {
             if (step == null) return;
-            var name = GetName(step.ID, STEP_LEAVED);
-            Log.Debug("OnStepLeaved: '" + name + "'");
+            var name = GetName(step.Id, c_stepLeaved);
+            Log.Debug($"OnStepLeaved: '{name}'");
             theExecutionRepository.Execute(name, step);
         }
 
         internal static void OnClosed(Step step)
         {
             Log.Debug("OnClosed");
-            theExecutionRepository.Execute(CLOSED, step);
+            theExecutionRepository.Execute(c_closed, step);
         }
 
         internal static void SetCurrentRunNull()
         {
-            theCurrentTourRun = null;
+            _theCurrentTourRun = null;
         }
 
-        private static string GetName(string stepID, string postfix)
+        private static string GetName(string stepId, string postfix)
         {
-            return string.Format("stepChange_{0}_{1}", stepID, postfix);
+            return string.Format("stepChange_{0}_{1}", stepId, postfix);
         }
 
         internal static void Do(Step step)
         {
-            var name = GetName(step.ID, DOABLE);
-            Log.Debug("Do: '" + name + "'");
+            var name = GetName(step.Id, c_doable);
+            Log.Debug($"Do: '{name}'");
             theDoableRepository.Execute(name, step);
         }
 
         internal static bool CanDo(Step step)
         {
-            return theDoableRepository.CanExecute(GetName(step.ID, DOABLE), step);
+            return theDoableRepository.CanExecute(GetName(step.Id, c_doable), step);
         }
 
         internal static bool HasDoableAttached(Step step)
         {
-            return theDoableRepository.Contains(GetName(step.ID, DOABLE));
+            return theDoableRepository.Contains(GetName(step.Id, c_doable));
         }
     }
 }

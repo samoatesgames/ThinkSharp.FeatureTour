@@ -14,8 +14,8 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
     internal class ActionRepository
     {
-        private readonly Dictionary<string, ExecuteAction> myExecuteActions = new Dictionary<string, ExecuteAction>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly Dictionary<string, CanExecuteAction> myCanExecuteActions = new Dictionary<string, CanExecuteAction>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, ExecuteAction> m_myExecuteActions = new Dictionary<string, ExecuteAction>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, CanExecuteAction> m_myCanExecuteActions = new Dictionary<string, CanExecuteAction>(StringComparer.InvariantCultureIgnoreCase);
 
         public IReleasable AddAction(string name, Action<Step> executeAction)
         {
@@ -24,17 +24,17 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
             var execute = new ExecuteAction(executeAction);
 
-            if (myExecuteActions.ContainsKey(name))
+            if (m_myExecuteActions.ContainsKey(name))
                 Log.Warn($"Action with name '{name}' already exists. Will be overwritten!");
 
-            myExecuteActions[name] = execute;
+            m_myExecuteActions[name] = execute;
 
-            Log.Debug("ActionRepository: Action '" + name + "' added.");
+            Log.Debug($"ActionRepository: Action '{name}' added.");
 
             return new ReleasableAction(() =>
             {
-                if (myExecuteActions.TryGetValue(name, out var executeStored) && executeStored == execute)
-                    myExecuteActions.Remove(name);
+                if (m_myExecuteActions.TryGetValue(name, out var executeStored) && executeStored == execute)
+                    m_myExecuteActions.Remove(name);
             });
         }
 
@@ -46,38 +46,38 @@ namespace ThinkSharp.FeatureTouring.Navigation
                 throw new ArgumentNullException(nameof(canExecuteAction));
 
             var execute = new ExecuteAction(executeAction);
-            myExecuteActions[name] = execute;
+            m_myExecuteActions[name] = execute;
             var canExecute = new CanExecuteAction(canExecuteAction);
-            myCanExecuteActions[name] = canExecute;
+            m_myCanExecuteActions[name] = canExecute;
 
-            Log.Debug("ActionRepository: Action '" + name + "' added (with CanExecute).");
+            Log.Debug($"ActionRepository: Action '{name}' added (with CanExecute).");
 
             return new ReleasableAction(() =>
             {
-                if (myExecuteActions.TryGetValue(name, out var executeStored) && executeStored == execute)
-                    myExecuteActions.Remove(name);
+                if (m_myExecuteActions.TryGetValue(name, out var executeStored) && executeStored == execute)
+                    m_myExecuteActions.Remove(name);
 
-                if (myCanExecuteActions.TryGetValue(name, out var canExecuteStored) && canExecuteStored == canExecute)
-                    myCanExecuteActions.Remove(name);
+                if (m_myCanExecuteActions.TryGetValue(name, out var canExecuteStored) && canExecuteStored == canExecute)
+                    m_myCanExecuteActions.Remove(name);
             });
         }
 
         public bool Contains(string name)
         {
-            return myExecuteActions.ContainsKey(name);
+            return m_myExecuteActions.ContainsKey(name);
         }
 
         internal void Clear()
         {
-            myExecuteActions.Clear();
-            myCanExecuteActions.Clear();
+            m_myExecuteActions.Clear();
+            m_myCanExecuteActions.Clear();
         }
 
         public void Execute(string name, Step step)
         {
-            if (!myExecuteActions.TryGetValue(name, out var action))
+            if (!m_myExecuteActions.TryGetValue(name, out var action))
             {
-                Log.Debug("ActionRepository: Action '" + name + "' not available.");
+                Log.Debug($"ActionRepository: Action '{name}' not available.");
                 return;
             }
 
@@ -86,14 +86,14 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
         public bool CanExecute(string name, Step step)
         {
-            if (!myCanExecuteActions.TryGetValue(name, out var canAction))
+            if (!m_myCanExecuteActions.TryGetValue(name, out var canAction))
                 return false;
 
             return canAction.Invoke(step);
         }
 
         // for unit testing
-        internal int ExecuteCount => myExecuteActions.Count;
-        internal int CanExecuteCount => myExecuteActions.Count;
+        internal int ExecuteCount => m_myExecuteActions.Count;
+        internal int CanExecuteCount => m_myExecuteActions.Count;
     }
 }

@@ -5,7 +5,6 @@
     <RootNamespace>ThinkSharp.FeatureTouring</RootNamespace>
     <AssemblyName>ThinkSharp.FeatureTouring.Demo</AssemblyName>
     <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />

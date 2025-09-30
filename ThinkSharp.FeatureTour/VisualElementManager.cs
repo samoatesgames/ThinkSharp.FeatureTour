@@ -14,13 +14,13 @@ namespace ThinkSharp.FeatureTouring
 {
     internal class WindowActivationChangedEventArgs : EventArgs
     {
-        public WindowActivationChangedEventArgs(Guid windowID, bool showPoup)
+        public WindowActivationChangedEventArgs(Guid windowId, bool showPoup)
         {
             ShowPopup = showPoup;
-            WindowID = windowID;
+            WindowId = windowId;
         }
         public bool ShowPopup { get; set; }
-        public Guid WindowID { get; private set; }
+        public Guid WindowId { get; private set; }
     }
     internal interface IPlacementAware
     {
@@ -48,30 +48,30 @@ namespace ThinkSharp.FeatureTouring
         /// <summary>
         /// Gets the <see cref="VisualElement"/> with the specified elementID or null if the element is nor available.
         /// </summary>
-        /// <param name="elementID">
+        /// <param name="elementId">
         /// The element ID to get the <see cref="VisualElement"/> for.
         /// </param>
         /// <param name="includeUnloaded">
         /// true if also unloaded (not yet visible) elements should be returned; otherwise false.
         /// </param>
         /// <returns></returns>
-        VisualElement GetVisualElement(string elementID, bool includeUnloaded);
+        VisualElement GetVisualElement(string elementId, bool includeUnloaded);
     }
 
     internal class VisualElementManager : IVisualElementManager
     {
-        private readonly IWindowManager myWindowManager;
-        private readonly List<VisualElement> myVisualElements = new List<VisualElement>();
+        private readonly IWindowManager m_myWindowManager;
+        private readonly List<VisualElement> m_myVisualElements = new List<VisualElement>();
         
         public VisualElementManager(IWindowManager windowManager)
         {
-            myWindowManager = windowManager;
-            myWindowManager.WindowRemoved += (s, eargs) => myVisualElements.RemoveAll(ve => ve.WindowID == eargs.WindowID);
+            m_myWindowManager = windowManager;
+            m_myWindowManager.WindowRemoved += (_, eargs) => m_myVisualElements.RemoveAll(ve => ve.WindowId == eargs.WindowId);
         }
 
         IEnumerable<VisualElement> IVisualElementManager.GetVisualElements(bool includeUnloaded)
         {
-            foreach (var visualElement in myVisualElements.ToArray())
+            foreach (var visualElement in m_myVisualElements.ToArray())
             {
                 if (visualElement.TryGetElement(out var element))
                 {
@@ -84,54 +84,52 @@ namespace ThinkSharp.FeatureTouring
             }
         }
 
-        VisualElement IVisualElementManager.GetVisualElement(string elementID, bool includeUnloaded)
+        VisualElement IVisualElementManager.GetVisualElement(string elementId, bool includeUnloaded)
         {
-            return (this as IVisualElementManager).GetVisualElements(includeUnloaded).FirstOrDefault(e => e.ElementID == elementID);
+            return (this as IVisualElementManager).GetVisualElements(includeUnloaded).FirstOrDefault(e => e.ElementId == elementId);
         }
 
         
         internal void ElementAdded(FrameworkElement element)
         {
             var visualElement = GetVisualElement(element);
-            myVisualElements.Add(visualElement);
+            m_myVisualElements.Add(visualElement);
         }
 
         internal void ElementPropertyChanged(UIElement element, Action<UIElement, VisualElement> propertySetter)
         {
-            var elementID = TourHelper.GetElementID(element);
-            if (string.IsNullOrEmpty(elementID))
+            var elementId = TourHelper.GetElementId(element);
+            if (string.IsNullOrEmpty(elementId))
                 return;
 
-            var visualElement = myVisualElements.FirstOrDefault(e => e.ElementID == elementID);
+            var visualElement = m_myVisualElements.FirstOrDefault(e => e.ElementId == elementId);
             if (visualElement != null)
                 propertySetter(element, visualElement);
         }
 
         private VisualElement GetVisualElement(FrameworkElement element)
         {
-            var elementID = TourHelper.GetElementID(element);
+            var elementId = TourHelper.GetElementId(element);
             var placement = TourHelper.GetPlacement(element);
             var transtionBehavior = TourHelper.GetWindowTransisionBehavior(element);
 
-            RemoveElement(elementID);
+            RemoveElement(elementId);
 
             return new VisualElement(element)
             {
                 Placement = placement,
-                ElementID = elementID,
+                ElementId = elementId,
                 WindowTransisionBehavior = transtionBehavior,
-                WindowID = myWindowManager.GetWindowID(element, elementID)
+                WindowId = m_myWindowManager.GetWindowId(element, elementId)
             };
         }
 
-        private void RemoveElement(string elementID)
+        private void RemoveElement(string elementId)
         {
-            foreach (var visualElement in myVisualElements.ToArray())
+            foreach (var visualElement in m_myVisualElements.ToArray())
             {
-                FrameworkElement element;
-                if (!visualElement.TryGetElement(out element) ||
-                    visualElement.ElementID == elementID)
-                    myVisualElements.Remove(visualElement);
+                if (!visualElement.TryGetElement(out _) || visualElement.ElementId == elementId)
+                    m_myVisualElements.Remove(visualElement);
             }
         }
     }
@@ -148,59 +146,59 @@ namespace ThinkSharp.FeatureTouring
 
     internal class PupupNavigator : IPopupNavigator
     {
-        private FeatureTourPopup myPopup;
+        private FeatureTourPopup m_myPopup;
 
         private class FeatureTourPopup
         {
-            private readonly IPlacementAware myViewModel;
-            private readonly Popup myPopup;
+            private readonly IPlacementAware m_myViewModel;
+            private readonly Popup m_myPopup;
             
-            private FrameworkElement myElement;
+            private FrameworkElement m_myElement;
 
             private CustomPopupPlacement[] CustomPopupPlacementCallback(Size popupSize, Size targetSize, Point offset)
-            => PlacementHelper.CustomPopupPlacementCallback(popupSize, targetSize, myViewModel?.Placement ?? Placement.TopLeft);
+            => PlacementHelper.CustomPopupPlacementCallback(popupSize, targetSize, m_myViewModel?.Placement ?? Placement.TopLeft);
 
             public FeatureTourPopup(IPlacementAware viewModel)
             {
-                myViewModel = viewModel;
+                m_myViewModel = viewModel;
 
                 var tourControl = new TourControl();
-                myPopup = new Popup
+                m_myPopup = new Popup
                 {
                     AllowsTransparency = true,
                     Child = tourControl,
                     Placement = PlacementMode.Custom
                 };
 
-                tourControl.DataContext = myViewModel;
+                tourControl.DataContext = m_myViewModel;
 
-                myPopup.CustomPopupPlacementCallback += CustomPopupPlacementCallback;
-                myPopup.Opened += (s, e) => UpdatePopupPosition();
+                m_myPopup.CustomPopupPlacementCallback += CustomPopupPlacementCallback;
+                m_myPopup.Opened += (_, _) => UpdatePopupPosition();
             }
 
             public void Open()
             {
                 UpdatePopupPosition();
-                myPopup.IsOpen = true;   
+                m_myPopup.IsOpen = true;   
             }
-            public void Close() => myPopup.IsOpen = false;
+            public void Close() => m_myPopup.IsOpen = false;
 
             public void UpdatePopupPosition()
             {
                 // Workaround to move the popup if the window is moved.
-                var offset = myPopup.HorizontalOffset;
-                myPopup.HorizontalOffset = offset + 1;
-                myPopup.HorizontalOffset = offset;
-                var vm = myViewModel;
+                var offset = m_myPopup.HorizontalOffset;
+                m_myPopup.HorizontalOffset = offset + 1;
+                m_myPopup.HorizontalOffset = offset;
+                var vm = m_myViewModel;
                 if (vm != null)
                 {
-                    if (myPopup.PlacementTarget is FrameworkElement { IsLoaded: true })
+                    if (m_myPopup.PlacementTarget is FrameworkElement { IsLoaded: true })
                     {
-                        vm.ActualPlacement = myPopup.GetActualPlacement(vm.Placement);
+                        vm.ActualPlacement = m_myPopup.GetActualPlacement(vm.Placement);
                     }
                     else
                     {
-                        myPopup.IsOpen = false;
+                        m_myPopup.IsOpen = false;
                     }
                 }
             }
@@ -209,30 +207,30 @@ namespace ThinkSharp.FeatureTouring
             {
                 DetachEventHandlers();
 
-                myElement = element;
+                m_myElement = element;
 
                 AttachEventHandlers();
 
-                if (myElement != null)
-                    myPopup.PlacementTarget = myElement;
+                if (m_myElement != null)
+                    m_myPopup.PlacementTarget = m_myElement;
                 else
                     Close();
             }
 
             private void DetachEventHandlers()
             {
-                var element = myElement;
+                var element = m_myElement;
                 if (element == null) return;
 
                 element.Loaded -= ElementOnLoaded;
                 element.Unloaded -= ElementOnUnloaded;
 
-                myElement = null;
+                m_myElement = null;
             }
 
             private void AttachEventHandlers()
             {
-                var element = myElement;
+                var element = m_myElement;
                 if (element == null) return;
 
                 element.Loaded += ElementOnLoaded;
@@ -252,58 +250,58 @@ namespace ThinkSharp.FeatureTouring
         public IDisposable MovePopupTo(VisualElement visualElement)
         {
             HidePopup();
-            Log.Debug("MovePopupTo: " + visualElement.ElementID);
+            Log.Debug($"MovePopupTo: {visualElement.ElementId}");
             if (visualElement.TryGetElement(out var element))
             {
-                myPopup?.UpdatePlacementTarget(element);
+                m_myPopup?.UpdatePlacementTarget(element);
             }
             else
             {
-                Log.Warn("MovePopupTo: Could not find placement target with element ID: " + visualElement.ElementID);
+                Log.Warn($"MovePopupTo: Could not find placement target with element ID: {visualElement.ElementId}");
             }
             return new DisposableAction(ShowPopup);
         }
 
         public void StartTour(IPlacementAware viewModel)
         {
-            myPopup?.Release();
-            myPopup = new FeatureTourPopup(viewModel);
+            m_myPopup?.Release();
+            m_myPopup = new FeatureTourPopup(viewModel);
         }
 
         public void ExitTour()
         {
-            if (myPopup == null)
+            if (m_myPopup == null)
             {
-                Log.Warn(nameof(ExitTour) + ": Unable to exit tour - tour has not been started.");
+                Log.Warn($"{nameof(ExitTour)}: Unable to exit tour - tour has not been started.");
             }
             else
             {
-                myPopup?.Release();
-                myPopup = null;
+                m_myPopup?.Release();
+                m_myPopup = null;
             }
         }
 
         public void ShowPopup()
         {
-            myPopup?.Open();
+            m_myPopup?.Open();
         }
 
         public void HidePopup()
         {
-            myPopup?.Close();
+            m_myPopup?.Close();
         }
 
         public void UpdatePopupPosition()
         {
-            myPopup?.UpdatePopupPosition();
+            m_myPopup?.UpdatePopupPosition();
         }
     }
 
     internal interface IWindowManager
     {
-        Guid GetActiveWindowID();
-        bool IsParentWindow(Guid parentID, Guid childID);
-        Guid GetWindowID(UIElement element, string elementID);
+        Guid GetActiveWindowId();
+        bool IsParentWindow(Guid parentId, Guid childId);
+        Guid GetWindowId(UIElement element, string elementId);
 
         event EventHandler<WindowActivationChangedEventArgs> WindowActivated;
         event EventHandler<WindowActivationChangedEventArgs> WindowDeactivated;
@@ -312,8 +310,8 @@ namespace ThinkSharp.FeatureTouring
 
     internal class WindowManager : IWindowManager
     {
-        private readonly IPopupNavigator myPopupNavigator;
-        private readonly Dictionary<Window, Guid> myReferencedWindows = new Dictionary<Window, Guid>();
+        private readonly IPopupNavigator m_myPopupNavigator;
+        private readonly Dictionary<Window, Guid> m_myReferencedWindows = new Dictionary<Window, Guid>();
 
         public event EventHandler<WindowActivationChangedEventArgs> WindowActivated;
         public event EventHandler<WindowActivationChangedEventArgs> WindowDeactivated;
@@ -321,10 +319,10 @@ namespace ThinkSharp.FeatureTouring
 
         public WindowManager(IPopupNavigator popupNavigator)
         {
-            myPopupNavigator = popupNavigator;
+            m_myPopupNavigator = popupNavigator;
         }
 
-        public Guid GetActiveWindowID()
+        public Guid GetActiveWindowId()
         {
             var current = Application.Current;
 
@@ -332,16 +330,16 @@ namespace ThinkSharp.FeatureTouring
             if (activeWindow == null)
                 return Guid.Empty;
 
-            if (!myReferencedWindows.TryGetValue(activeWindow, out var windowID))
+            if (!m_myReferencedWindows.TryGetValue(activeWindow, out var windowId))
                 return Guid.Empty;
 
-            return windowID;
+            return windowId;
         }
 
-        public bool IsParentWindow(Guid parentID, Guid childID)
+        public bool IsParentWindow(Guid parentId, Guid childId)
         {
-            var idxParent = myReferencedWindows.Values.ToList().IndexOf(parentID);
-            var idxChild = myReferencedWindows.Values.ToList().IndexOf(childID);
+            var idxParent = m_myReferencedWindows.Values.ToList().IndexOf(parentId);
+            var idxChild = m_myReferencedWindows.Values.ToList().IndexOf(childId);
 
             if (idxParent < 0 || idxChild < 0)
                 return false;
@@ -350,21 +348,21 @@ namespace ThinkSharp.FeatureTouring
             return idxParent < idxChild;
         }
 
-        public Guid GetWindowID(UIElement element, string elementID)
+        public Guid GetWindowId(UIElement element, string elementId)
         {
             var window = Window.GetWindow(element);
             if (window == null)
             {
-                var lastWindow = myReferencedWindows.LastOrDefault();
+                var lastWindow = m_myReferencedWindows.LastOrDefault();
                 if (lastWindow.Key == null)
                     return Guid.Empty;
                 return lastWindow.Value;
             }
 
-            if (!myReferencedWindows.TryGetValue(window, out var guid))
+            if (!m_myReferencedWindows.TryGetValue(window, out var guid))
             {
                 guid = IsMainWindow(window) ? Guid.Empty : Guid.NewGuid();
-                myReferencedWindows.Add(window, guid);
+                m_myReferencedWindows.Add(window, guid);
                 window.SizeChanged += WindowSizeChanged;
                 window.LocationChanged += WindowLocationChanged;
                 window.Deactivated += WinDeactivated;
@@ -397,7 +395,7 @@ namespace ThinkSharp.FeatureTouring
                 window.Closed -= WindowClosed;
 
                 // remove references (element and window)
-                if (myReferencedWindows.Remove(window, out var guid))
+                if (m_myReferencedWindows.Remove(window, out var guid))
                 {
                     WindowRemoved?.Invoke(this, new WindowActivationChangedEventArgs(guid, false));
                 }
@@ -406,12 +404,12 @@ namespace ThinkSharp.FeatureTouring
 
         private void WindowLocationChanged(object sender, EventArgs e)
         {
-            myPopupNavigator.UpdatePopupPosition();
+            m_myPopupNavigator.UpdatePopupPosition();
         }
 
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            myPopupNavigator.UpdatePopupPosition();
+            m_myPopupNavigator.UpdatePopupPosition();
         }
 
         private void WinDeactivated(object sender, EventArgs e)
@@ -419,18 +417,18 @@ namespace ThinkSharp.FeatureTouring
             // close popup because it is on top (even of windows of other applications)
             var open = OnWindowActivationChanged(sender, WindowDeactivated, false);
             if (open)
-                myPopupNavigator.ShowPopup();
+                m_myPopupNavigator.ShowPopup();
             else
-                myPopupNavigator.HidePopup();
+                m_myPopupNavigator.HidePopup();
         }
 
         private void WinActivated(object sender, EventArgs e)
         {
             var open = OnWindowActivationChanged(sender, WindowActivated, true);
             if (open)
-                myPopupNavigator.ShowPopup();
+                m_myPopupNavigator.ShowPopup();
             else
-                myPopupNavigator.HidePopup();
+                m_myPopupNavigator.HidePopup();
         }
 
         private bool OnWindowActivationChanged(object sender, EventHandler<WindowActivationChangedEventArgs> handler, bool showPopup)
@@ -442,7 +440,7 @@ namespace ThinkSharp.FeatureTouring
             if (sender is not Window window)
                 return false;
 
-            if (myReferencedWindows.TryGetValue(window, out var guid))
+            if (m_myReferencedWindows.TryGetValue(window, out var guid))
             {
                 var args = new WindowActivationChangedEventArgs(guid, showPopup);
                 h(this, args);

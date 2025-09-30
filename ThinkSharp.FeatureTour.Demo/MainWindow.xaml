@@ -27,36 +27,36 @@
             </StackPanel.Resources>
             
             <Button Content="Introduction (passive tour)"
-                    featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonIntroduction}"
+                    featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonIntroduction}"
                     featureTouring:TourHelper.Placement="RightCenter"
                     Command="{Binding CmdStartIntroduction}" />
 
             <Button Content="Active Tour" 
-                    featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonActiveTour}"
+                    featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonActiveTour}"
                     featureTouring:TourHelper.Placement="RightCenter"
                     Command="{Binding CmdStartActiveTour}"/>
                 
             <Button Content="Tour with Dialogs" 
-                    featureTouring:TourHelper.ElementID="ButtonTourWithDialog"
+                    featureTouring:TourHelper.ElementId="ButtonTourWithDialog"
                     featureTouring:TourHelper.Placement="RightCenter"
                     Command="{Binding CmdStartDialogTour}"/>
 
             <Button Content="Positioning" Command="{Binding CmdStartPositioning}"
-                    featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonPositioning}"
+                    featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonPositioning}"
                     featureTouring:TourHelper.Placement="RightCenter"/>
 
             <Button Content="Custom View" Command="{Binding CmdStartCustomView}"
-                    featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonCustomView}"
+                    featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonCustomView}"
                     featureTouring:TourHelper.Placement="RightCenter"/>
 
             <Button Content="Tour Selection Menu" Command="{Binding CmdStartOverView}"
-                    featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonOverView}"
+                    featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonOverView}"
                     featureTouring:TourHelper.Placement="RightCenter"/>
 
         </StackPanel>
 
         <StackPanel Grid.Column="2" Margin="10"
-                        featureTouring:TourHelper.ElementID="{x:Static app:ElementID.GroupBox}"
+                        featureTouring:TourHelper.ElementId="{x:Static app:ElementId.GroupBox}"
             
                     featureTouring:TourHelper.Placement="TopCenter">
 
@@ -105,7 +105,7 @@
                     <Button Content="Button" FontSize="32" Width="150" 
                             HorizontalAlignment="Center" VerticalAlignment="Center" 
                             FontWeight="Bold" Margin="40" Padding="30"
-                            featureTouring:TourHelper.ElementID="{x:Static app:ElementID.Rectangle}"
+                            featureTouring:TourHelper.ElementId="{x:Static app:ElementId.Rectangle}"
                             featureTouring:TourHelper.Placement="{Binding Placement}"/>
                 </Grid>
             </TabItem>
@@ -132,44 +132,44 @@
                     </Grid.RowDefinitions>
                     
                     <TextBlock Text="10 + 11 = "/>
-                    <TextBox Grid.Column="1" x:Name="myTbResult"
+                    <TextBox Grid.Row="0" Grid.Column="1" x:Name="MyTbResult"
                              Text="{Binding Result}"
-                             featureTouring:TourHelper.ElementID="{x:Static app:ElementID.TextBoxResult}"
+                             featureTouring:TourHelper.ElementId="{x:Static app:ElementId.TextBoxResult}"
                              featureTouring:TourHelper.Placement="BottomLeft"/>
 
-                    <TextBlock Text="Path" Grid.Row="1" />
-                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="myTbPath"
+                    <TextBlock Text="Path" Grid.Row="1" Grid.Column="0" />
+                    <TextBox Grid.Column="1" Grid.Row="1" x:Name="MyTbPath"
                              Text="{Binding Path}"
-                             featureTouring:TourHelper.ElementID="{x:Static app:ElementID.TextBoxPath}"
+                             featureTouring:TourHelper.ElementId="{x:Static app:ElementId.TextBoxPath}"
                              featureTouring:TourHelper.Placement="BottomLeft"/>
 
-                    <TextBlock Text="Option" Grid.Row="2"/>
-                    <ComboBox Grid.Column="1" Grid.Row="2" x:Name="myCbOptions"
+                    <TextBlock Text="Option" Grid.Row="2" Grid.Column="0" />
+                    <ComboBox Grid.Column="1" Grid.Row="2" x:Name="MyCbOptions"
                               SelectedIndex="{Binding SelectedIndex}"
-                              featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ComboBoxOption}"
+                              featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ComboBoxOption}"
                               featureTouring:TourHelper.Placement="BottomLeft">
                         <ComboBoxItem>OptionA</ComboBoxItem>
                         <ComboBoxItem>OptionB</ComboBoxItem>
                         <ComboBoxItem>OptionC</ComboBoxItem>
                     </ComboBox>
 
-                    <Button Content="Clear" x:Name="myBtnClear" Grid.Row="3" Grid.ColumnSpan="2"
+                    <Button Content="Clear" x:Name="MyBtnClear" Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0"
                             HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="100"
                             Command="{Binding CmdClear}"
-                            featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonClear}"
+                            featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonClear}"
                             featureTouring:TourHelper.Placement="TopCenter" />
                 </Grid>
             </TabItem>
             <TabItem Header="Dialogs">
                 <Button Content="Push Me!" VerticalAlignment="Top" Margin="10"
                         Command="{Binding CmdOpenDialog}"
-                        featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonPushMe}"
+                        featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonPushMe}"
                         featureTouring:TourHelper.Placement="BottomCenter" />
             </TabItem>
             <TabItem Header="CustomView">
                 <Rectangle HorizontalAlignment="Center"
                            VerticalAlignment="Center" 
-                           featureTouring:TourHelper.ElementID="{x:Static app:ElementID.CustomView}"
+                           featureTouring:TourHelper.ElementId="{x:Static app:ElementId.CustomView}"
                            featureTouring:TourHelper.Placement="Center"/>
             </TabItem>
         </TabControl>

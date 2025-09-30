@@ -12,9 +12,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     /// </summary>
     public class TourViewModel : ViewModelBase, IPlacementAware
     {
-        private readonly ITourRun myTourRun;
-        private readonly string myClose = TextLocalization.Close;
-        private readonly string myNext = TextLocalization.Next;
+        private readonly string m_myClose = TextLocalization.Close;
+        private readonly string m_myNext = TextLocalization.Next;
 
         /// <summary>
         /// Creates a new instance of the class.
@@ -26,62 +25,61 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </param>
         protected internal TourViewModel(ITourRun tourRun)
         {
-            myTourRun = tourRun ?? throw new ArgumentNullException(nameof(tourRun));
-            CmdDoIt = new RelayCommand(o => myTourRun.DoIt(), o => myTourRun.CanDoIt());
-            CmdClose = new RelayCommand(o => myTourRun.Close());
-            CmdNext = new RelayCommand(o =>
+            var myTourRun = tourRun ?? throw new ArgumentNullException(nameof(tourRun));
+            CmdDoIt = new RelayCommand(_ => myTourRun.DoIt(), _ => myTourRun.CanDoIt());
+            CmdClose = new RelayCommand(_ => myTourRun.Close());
+            CmdNext = new RelayCommand(_ =>
             {
-                if (ButtonText == myClose)
+                if (ButtonText == m_myClose)
                     myTourRun.Close();
                 else
                     myTourRun.NextStep(false);
-            }, o => ButtonText == myClose || myTourRun.CanNextStep());
-            ButtonText = myNext;
+            }, _ => ButtonText == m_myClose || myTourRun.CanNextStep());
+            ButtonText = m_myNext;
         }
 
         #region Content
 
-        private object myContent;
+        private object m_myContent;
         public object Content
         {
-            get => myContent;
-            set => SetValue("Content", ref myContent, value);
+            get => m_myContent;
+            set => SetValue("Content", ref m_myContent, value);
         }
 
         #endregion
         
         #region Header
 
-        private object myHeader;
+        private object m_myHeader;
         public object Header
         {
-            get => myHeader;
-            set => SetValue("Header", ref myHeader, value);
+            get => m_myHeader;
+            set => SetValue("Header", ref m_myHeader, value);
         }
 
         #endregion
 
         #region Steps
 
-        private string mySteps;
-        [Obsolete("Will be removed in furture releases.")]
+        private string m_mySteps;
         public string Steps
         {
-            get => mySteps;
-            set => SetValue("Steps", ref mySteps, value);
+            get => m_mySteps;
+            set => SetValue("Steps", ref m_mySteps, value);
         }
 
         #endregion
 
         #region Placement
 
-        private Placement myPlacement;
+        private Placement m_myPlacement;
         public Placement Placement
         {
-            get => myPlacement;
+            get => m_myPlacement;
             set
             {
-                if (SetValue("Placement", ref myPlacement, value))
+                if (SetValue("Placement", ref m_myPlacement, value))
                     ActualPlacement = value;
             }
         }
@@ -90,33 +88,33 @@ namespace ThinkSharp.FeatureTouring.ViewModels
 
         #region ActualPlacement
 
-        private Placement myActualPlacement;
+        private Placement m_myActualPlacement;
         public Placement ActualPlacement
         {
-            get => myActualPlacement;
-            set => SetValue("ActualPlacement", ref myActualPlacement, value);
+            get => m_myActualPlacement;
+            set => SetValue("ActualPlacement", ref m_myActualPlacement, value);
         }
 
         #endregion
 
         #region ContentTemplate
 
-        private DataTemplate myContentTemplate;
+        private DataTemplate m_myContentTemplate;
         public DataTemplate ContentTemplate
         {
-            get => myContentTemplate;
-            set => SetValue("ContentTemplate", ref myContentTemplate, value);
+            get => m_myContentTemplate;
+            set => SetValue("ContentTemplate", ref m_myContentTemplate, value);
         }
 
         #endregion
 
         #region ContentTemplate
 
-        private DataTemplate myHeaderTemplate;
+        private DataTemplate m_myHeaderTemplate;
         public DataTemplate HeaderTemplate
         {
-            get => myHeaderTemplate;
-            set => SetValue("HeaderTemplate", ref myHeaderTemplate, value);
+            get => m_myHeaderTemplate;
+            set => SetValue("HeaderTemplate", ref m_myHeaderTemplate, value);
         }
 
         #endregion
@@ -124,16 +122,16 @@ namespace ThinkSharp.FeatureTouring.ViewModels
 
         #region ButtonText
 
-        private string myButtonText;
+        private string m_myButtonText;
         public string ButtonText
         {
-            get => myButtonText;
-            set => SetValue("ButtonText", ref myButtonText, value);
+            get => m_myButtonText;
+            set => SetValue("ButtonText", ref m_myButtonText, value);
         }
 
         internal void SetCloseText()
         {
-            ButtonText = myClose;
+            ButtonText = m_myClose;
         }
 
         #endregion
@@ -141,38 +139,38 @@ namespace ThinkSharp.FeatureTouring.ViewModels
 
         #region ShowDoIt
 
-        private bool myShowDoIt;
+        private bool m_myShowDoIt;
         public bool ShowDoIt
         {
-            get => myShowDoIt;
-            set => SetValue("ShowDoIt", ref myShowDoIt, value);
+            get => m_myShowDoIt;
+            set => SetValue("ShowDoIt", ref m_myShowDoIt, value);
         }
 
         #endregion
 
         #region ShowNext
 
-        private bool myShowNext;
+        private bool m_myShowNext;
         public bool ShowNext
         {
-            get => myShowNext || ButtonText == myClose;
-            set => SetValue("ShowNext", ref myShowNext, value);
+            get => m_myShowNext || ButtonText == m_myClose;
+            set => SetValue("ShowNext", ref m_myShowNext, value);
         }
 
         #endregion
 
         #region CurrentStepNo
 
-        private int myCurrentStepNo = 1;
+        private int m_myCurrentStepNo = 1;
         /// <summary>
         /// Gets or sets the current step number (1-based) of the current tour.
         /// </summary>
         public int CurrentStepNo
         {
-            get => myCurrentStepNo;
+            get => m_myCurrentStepNo;
             internal set
             {
-                if (SetValue("CurrentStepNo", ref myCurrentStepNo, value))
+                if (SetValue("CurrentStepNo", ref m_myCurrentStepNo, value))
                     HasTourFinished = CurrentStepNo == TotalStepsCount;
             }
         }
@@ -181,28 +179,28 @@ namespace ThinkSharp.FeatureTouring.ViewModels
 
         #region TotalStepCount
 
-        private int myTotalStepsCount = 1;
+        private int m_myTotalStepsCount = 1;
         /// <summary>
         /// Gets or sets the number of total steps of the current tour.
         /// </summary>
         public int TotalStepsCount
         {
-            get => myTotalStepsCount;
-            internal set => SetValue("TotalStepsCount", ref myTotalStepsCount, value);
+            get => m_myTotalStepsCount;
+            internal set => SetValue("TotalStepsCount", ref m_myTotalStepsCount, value);
         }
 
         #endregion
 
         #region HasTourFinished
 
-        private bool myHasTourFinished;
+        private bool m_myHasTourFinished;
         /// <summary>
         /// Gets a value that indicates if the current step is the last one.
         /// </summary>
         public bool HasTourFinished
         {
-            get => myHasTourFinished;
-            internal set => SetValue("HasTourFinished", ref myHasTourFinished, value);
+            get => m_myHasTourFinished;
+            internal set => SetValue("HasTourFinished", ref m_myHasTourFinished, value);
         }
 
         #endregion

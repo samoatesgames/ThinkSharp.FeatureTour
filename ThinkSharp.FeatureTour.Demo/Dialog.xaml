@@ -14,13 +14,13 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button Content="Me too!" Click="ButtonMeToOnClick"
-                featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonPushMeToo}"
+                featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonPushMeToo}"
                 featureTouring:TourHelper.Placement="TopCenter"/>
         <TextBlock Grid.Row="1" 
                    Text="Close the dialog to see what happen..." />
         
         <Button Grid.Row="2" Content="Close" Click="ButtonBaseOnClick"
-                featureTouring:TourHelper.ElementID="{x:Static app:ElementID.ButtonClose}"
+                featureTouring:TourHelper.ElementId="{x:Static app:ElementId.ButtonClose}"
                 featureTouring:TourHelper.Placement="TopCenter"/>
     </Grid>
 </Window>

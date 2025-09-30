@@ -13,8 +13,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged, INotifyPropertyChanging
     {
-        private event PropertyChangedEventHandler myPropertyChanged;
-        private event PropertyChangingEventHandler myPropertyChanging;
+        private event PropertyChangedEventHandler MyPropertyChanged;
+        private event PropertyChangingEventHandler MyPropertyChanging;
 
 
         //  Methods
@@ -31,7 +31,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </param>
         protected virtual void OnPropertyChanged(String property)
         {
-            var handler = myPropertyChanged;
+            var handler = MyPropertyChanged;
             if (handler == null) return;
 
             VerifyPropertyName(property);
@@ -51,7 +51,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </param>
         protected virtual void OnPropertyChanging(String property)
         {
-            var handler = myPropertyChanging;
+            var handler = MyPropertyChanging;
             if (handler == null) return;
 
             VerifyPropertyName(property);
@@ -155,7 +155,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
 
             if (TypeDescriptor.GetProperties(this)[propertyName] != null) return;
 
-            msg = "Invalid property name: " + propertyName;
+            msg = $"Invalid property name: {propertyName}";
 
             Debug.Fail(msg);
 
@@ -175,8 +175,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged
         {
-            add => myPropertyChanged += value;
-            remove => myPropertyChanged -= value;
+            add => MyPropertyChanged += value;
+            remove => MyPropertyChanged -= value;
         }
 
 
@@ -190,8 +190,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         public event PropertyChangingEventHandler PropertyChanging
         {
-            add => myPropertyChanging += value;
-            remove => myPropertyChanging -= value;
+            add => MyPropertyChanging += value;
+            remove => MyPropertyChanging -= value;
         }
 
         #endregion

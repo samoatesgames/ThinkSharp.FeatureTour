@@ -4,28 +4,5 @@
     <OutputType>Library</OutputType>
     <RootNamespace>ThinkSharp.FeatureTouring</RootNamespace>
     <UseWPF>true</UseWPF>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
-    <DocumentationFile>bin\Debug\ThinkSharp.FeatureTour.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineConstants>TRACE;NET40</DefineConstants>
-    <DocumentationFile>bin\Release\ThinkSharp.FeatureTour.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <AppDesigner Include="Properties\" />
-    <None Update="Thinksharp.FeatureTour.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Tools\LicenseActivator.exe.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Tools\LicenseActivator.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
 </Project>

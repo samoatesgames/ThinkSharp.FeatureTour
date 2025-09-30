@@ -10,28 +10,28 @@ namespace ThinkSharp.FeatureTouring.Touring
 {
     public class BinaryCalculatorViewModel : ObservableObject
     {
-        private string _text = string.Empty;
-        private string _operator = "";
-        private int _result;
+        private string m_text = string.Empty;
+        private string m_operator = "";
+        private int m_result;
         public string Text
         {
-            get => _text;
-            set => SetProperty(ref _text, value);
+            get => m_text;
+            set => SetProperty(ref m_text, value);
         }
-        public ICommand CmdZero => new RelayCommand(() => Text = (EnteringNumber ? Text : "") + "0");
-        public ICommand CmdOne => new RelayCommand(() => Text = (EnteringNumber ? Text : "") + "1");
+        public ICommand CmdZero => new RelayCommand(() => Text = $"{(EnteringNumber ? Text : "")}0");
+        public ICommand CmdOne => new RelayCommand(() => Text = $"{(EnteringNumber ? Text : "")}1");
 
         public ICommand CmdAdd => new RelayCommand(() =>
         {
             CalculateIntermadiateResult();
-            _operator = "+";
+            m_operator = "+";
             Text = "+";
 
         }, () => EnteringNumber);
         public ICommand CmdSubstract => new RelayCommand(() =>
         {
             CalculateIntermadiateResult();
-            _operator = "-";
+            m_operator = "-";
             Text = "-";
         }, () => EnteringNumber);
         public ICommand CmdResult => new RelayCommand(() => Text = CalculateIntermadiateResult(), () => EnteringNumber);
@@ -39,26 +39,26 @@ namespace ThinkSharp.FeatureTouring.Touring
         public ICommand CmdClear => new RelayCommand(() =>
         {
             Text = "";
-            _result = 0;
-            _operator = "";
+            m_result = 0;
+            m_operator = "";
         });
 
         private string CalculateIntermadiateResult()
         {
-            switch (_operator)
+            switch (m_operator)
             {
                 case "+":
-                    _result += Convert.ToInt32(Text, 2);
+                    m_result += Convert.ToInt32(Text, 2);
                     break;
                 case "-":
-                    _result -= Convert.ToInt32(Text, 2);
+                    m_result -= Convert.ToInt32(Text, 2);
                     break;
                 default:
-                    _result = Convert.ToInt32(Text, 2);
+                    m_result = Convert.ToInt32(Text, 2);
                     break;
             }
-            _operator = "";
-            return Convert.ToString(_result, 2);
+            m_operator = "";
+            return Convert.ToString(m_result, 2);
         }
 
         private bool EnteringNumber => Text != "+" && Text != "-" && Text != "";

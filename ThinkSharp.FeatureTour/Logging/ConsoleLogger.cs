@@ -11,7 +11,7 @@ namespace ThinkSharp.FeatureTouring.Logging
     /// </summary>
     public class ConsoleLogger : ILogger
     {
-        private readonly string myPrefix;
+        private readonly string m_myPrefix;
 
         /// <summary>
         /// Creates a new instance of the class. This version does not use a prefix.
@@ -25,9 +25,9 @@ namespace ThinkSharp.FeatureTouring.Logging
         /// <param name="prefix">
         /// The prefix to use for all logging entries.
         /// </param>
-        public ConsoleLogger(string prefix)
+        private ConsoleLogger(string prefix)
         {
-            myPrefix = prefix;
+            m_myPrefix = prefix;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace ThinkSharp.FeatureTouring.Logging
         public void Debug(object message, Exception exception)
         {
             if (Debugger.IsAttached)
-                WriteLog(message + "; Exception: " + exception);
+                WriteLog($"{message}; Exception: {exception}");
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace ThinkSharp.FeatureTouring.Logging
         public void Error(object message, Exception exception)
         {
             if (Debugger.IsAttached)
-                WriteLog(message + "; Exception: " + exception);
+                WriteLog($"{message}; Exception: {exception}");
         }
         public void Info(object message)
         {
@@ -85,7 +85,7 @@ namespace ThinkSharp.FeatureTouring.Logging
         public void Info(object message, Exception exception)
         {
             if (Debugger.IsAttached)
-                WriteLog(message + "; Exception: " + exception);
+                WriteLog($"{message}; Exception: {exception}");
         }
         public void Warn(object message)
         {
@@ -101,12 +101,12 @@ namespace ThinkSharp.FeatureTouring.Logging
         public void Warn(object message, Exception exception)
         {
             if (Debugger.IsAttached)
-                WriteLog(message + "; Exception: " + exception);
+                WriteLog($"{message}; Exception: {exception}");
         }
 
         private void WriteLog(object logContent)
         {
-            Console.WriteLine(myPrefix + ":" + logContent);
+            Console.WriteLine($@"{m_myPrefix}:{logContent}");
         }
     }
 }

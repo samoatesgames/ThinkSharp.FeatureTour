@@ -28,9 +28,9 @@ namespace ThinkSharp.FeatureTouring
         /// Helper for reading ElementID property from a UIElement.
         /// </summary>
         /// <param name="obj">UIElement to read ElementID property from.</param>
-        public static string GetElementID(UIElement obj)
+        public static string GetElementId(UIElement obj)
         {
-            return (string)obj.GetValue(ElementIDProperty);
+            return (string)obj.GetValue(ElementIdProperty);
         }
 
         /// <summary>
@@ -38,18 +38,18 @@ namespace ThinkSharp.FeatureTouring
         /// </summary>
         /// <param name="obj">UIElement to set ElementID property on.</param>
         /// <param name="value">ElementID property value.</param>
-        public static void SetElementID(UIElement obj, string value)
+        public static void SetElementId(UIElement obj, string value)
         {
-            obj?.SetValue(ElementIDProperty, value);
+            obj?.SetValue(ElementIdProperty, value);
         }
 
         /// <summary>
         /// ElementID property. This is an attached property.
         /// ElementID can be used to mark visual elements and associate them with the popup.
         /// </summary>
-        public static readonly DependencyProperty ElementIDProperty =
-            DependencyProperty.RegisterAttached("ElementID", typeof(string), typeof(TourHelper), 
-            new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.None, (s, e) =>
+        public static readonly DependencyProperty ElementIdProperty =
+            DependencyProperty.RegisterAttached("ElementId", typeof(string), typeof(TourHelper), 
+            new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.None, (s, _) =>
             {
                 if (s is not FrameworkElement element) throw new InvalidOperationException("ElementID is only valid for objects of type FrameworkElement");
                 theVisualElementManager.ElementAdded(element);
@@ -83,7 +83,7 @@ namespace ThinkSharp.FeatureTouring
         /// Placement can be used to define the popup placement for a visual element.
         /// </summary>
         public static readonly DependencyProperty PlacementProperty =
-            DependencyProperty.RegisterAttached("Placement", typeof(Placement), typeof(TourHelper), new PropertyMetadata(Placement.TopLeft, (s, e) =>
+            DependencyProperty.RegisterAttached("Placement", typeof(Placement), typeof(TourHelper), new PropertyMetadata(Placement.TopLeft, (s, _) =>
             {
                 if (s is UIElement element) theVisualElementManager.ElementPropertyChanged(element, (el, ve) => ve.Placement = GetPlacement(el));
             }));
@@ -116,7 +116,7 @@ namespace ThinkSharp.FeatureTouring
         /// WindowTransisionBehavior can be used to define the tour behavior if another window gets activated.
         /// </summary>
         public static readonly DependencyProperty WindowTransisionBehaviorProperty =
-            DependencyProperty.RegisterAttached("WindowTransisionBehavior", typeof(WindowTransisionBehavior), typeof(TourHelper), new PropertyMetadata(WindowTransisionBehavior.Automatic, (s, e) =>
+            DependencyProperty.RegisterAttached("WindowTransisionBehavior", typeof(WindowTransisionBehavior), typeof(TourHelper), new PropertyMetadata(WindowTransisionBehavior.Automatic, (s, _) =>
             {
                 if (s is UIElement element) theVisualElementManager.ElementPropertyChanged(element, (el, ve) => ve.WindowTransisionBehavior = GetWindowTransisionBehavior(el));
             }));

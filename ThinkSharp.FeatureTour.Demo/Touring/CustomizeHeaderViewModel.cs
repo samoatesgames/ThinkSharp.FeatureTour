@@ -7,12 +7,12 @@ namespace ThinkSharp.FeatureTouring.Touring
 {
     public class CustomizeHeaderViewModel : ObservableObject
     {
-        private string _header = "My Header";
+        private string m_header = "My Header";
 
         public string Header
         {
-            get => _header;
-            set => SetProperty(ref _header, value);
+            get => m_header;
+            set => SetProperty(ref m_header, value);
         }
     }
 }

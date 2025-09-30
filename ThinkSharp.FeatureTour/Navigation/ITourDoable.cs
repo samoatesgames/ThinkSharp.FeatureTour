@@ -50,23 +50,23 @@ namespace ThinkSharp.FeatureTouring.Navigation
     }
     internal class TourDoable : ITourDoable
     {
-        private readonly ActionRepository myActionRepository;
-        private readonly string myName;
+        private readonly ActionRepository m_myActionRepository;
+        private readonly string m_myName;
 
         public TourDoable(ActionRepository actionRepository, string name)
         {
-            myActionRepository = actionRepository;
-            myName = name;
+            m_myActionRepository = actionRepository;
+            m_myName = name;
         }
 
         public IReleasable AttachDoable(Action<Step> doAction)
         {
-            return myActionRepository.AddAction(myName, doAction, s => true);
+            return m_myActionRepository.AddAction(m_myName, doAction, _ => true);
         }
 
         public IReleasable AttachDoable(Action<Step> doAction, Func<Step, bool> canDoAction)
         {
-            return myActionRepository.AddAction(myName, doAction, canDoAction);
+            return m_myActionRepository.AddAction(m_myName, doAction, canDoAction);
         }
     }
 }

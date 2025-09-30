@@ -8,7 +8,7 @@ namespace ThinkSharp.FeatureTouring.Helper
     internal class ReleasableAction : IReleasable
     {
         private static readonly IReleasable theEmpty = new ReleasableAction(null);
-        private readonly Action myAction;
+        private readonly Action m_myAction;
 
         /// <summary>
         /// </summary>
@@ -16,13 +16,12 @@ namespace ThinkSharp.FeatureTouring.Helper
         /// </param>
         public ReleasableAction(Action action)
         {
-            myAction = action;
+            m_myAction = action;
         }
 
         public void Release()
         {
-            if (myAction != null)
-                myAction();
+            m_myAction?.Invoke();
         }
 
         public static IReleasable Empty => theEmpty;

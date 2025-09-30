@@ -27,18 +27,18 @@ namespace ThinkSharp.FeatureTouring.Navigation
     }
     internal class TourExecution : ITourExecution
     {
-        private readonly ActionRepository myActionRepository;
-        private readonly string myName;
+        private readonly ActionRepository m_myActionRepository;
+        private readonly string m_myName;
 
         public TourExecution(ActionRepository actionRepository, string name)
         {
-            myActionRepository = actionRepository;
-            myName = name;
+            m_myActionRepository = actionRepository;
+            m_myName = name;
         }
 
         public void Execute(Action<Step> action)
         {
-            myActionRepository.AddAction(myName, action);
+            m_myActionRepository.AddAction(m_myName, action);
         }
     }
 }

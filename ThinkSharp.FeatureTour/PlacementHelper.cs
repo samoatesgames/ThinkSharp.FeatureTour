@@ -14,14 +14,14 @@ namespace ThinkSharp.FeatureTouring
     internal static class PlacementHelper
     {
         // distance from pop-up corner to the center of the pop-up arrow
-        private const int MARGIN = 30;
+        private const int c_margin = 30;
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+        private static extern bool GetWindowRect(IntPtr hWnd, out Rect lpRect);
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct RECT
+        private struct Rect
         {
             // ReSharper disable MemberCanBePrivate.Local
             // ReSharper disable FieldCanBeMadeReadOnly.Local
@@ -35,7 +35,7 @@ namespace ThinkSharp.FeatureTouring
 
         public static Placement GetActualPlacement(this Popup popup, Placement placement)
         {
-            if (popup == null || !popup.IsOpen || popup.PlacementTarget == null)
+            if (popup is not { IsOpen: true } || popup.PlacementTarget == null)
                 return placement;
 
             var child = popup.Child;
@@ -45,13 +45,8 @@ namespace ThinkSharp.FeatureTouring
 
             // If desired placement does not fir on screen, another placement will be used. That placement will be determined by popup automatically.
             IntPtr popupHandle = hwndSource.Handle;
-            //IntPtr tagetHandle = (PresentationSource.FromVisual(popup.PlacementTarget) as HwndSource).Handle;
+            GetWindowRect(popupHandle, out var popupRect);
 
-            var popupRect = new RECT();
-            //var targetRect = new RECT();
-            GetWindowRect(popupHandle, out popupRect);
-            //GetWindowRect(tagetHandle, out targetRect);
-// EXCEPTION HERE!!!
             var targetPoint = popup.PlacementTarget.PointToScreen(new Point(0, 0));
             var dx = targetPoint.X - popupRect.Left;
             var dy = popupRect.Top - targetPoint.Y;
@@ -107,8 +102,7 @@ namespace ThinkSharp.FeatureTouring
 
         public static CustomPopupPlacement[] CustomPopupPlacementCallback(Size popupSize, Size targetSize, Placement placement)
         {
-            var placements = new List<Placement>();
-            placements.Add(placement);
+            var placements = new List<Placement> { placement };
 
             switch (placement)
             {
@@ -208,7 +202,7 @@ namespace ThinkSharp.FeatureTouring
                 // Left
                 case Placement.LeftTop:
                     x = -popupSize.Width;
-                    y = targetSize.Height < (2 * MARGIN) ? (-MARGIN + targetSize.Height / 2) : 0;
+                    y = targetSize.Height < (2 * c_margin) ? (-c_margin + targetSize.Height / 2) : 0;
                     return new CustomPopupPlacement(new Point(x, y), PopupPrimaryAxis.Horizontal);
                 case Placement.LeftCenter:
                     x = -popupSize.Width;
@@ -216,13 +210,13 @@ namespace ThinkSharp.FeatureTouring
                     return new CustomPopupPlacement(new Point(x, y), PopupPrimaryAxis.Horizontal);
                 case Placement.LeftBottom:
                     x = -popupSize.Width;
-                    y = targetSize.Height < (2 * MARGIN) ? (targetSize.Height - (popupSize.Height - MARGIN + targetSize.Height / 2)) : targetSize.Height - popupSize.Height;
+                    y = targetSize.Height < (2 * c_margin) ? (targetSize.Height - (popupSize.Height - c_margin + targetSize.Height / 2)) : targetSize.Height - popupSize.Height;
                     return new CustomPopupPlacement(new Point(x, y), PopupPrimaryAxis.Horizontal);
 
                 // Right
                 case Placement.RightTop:
                     x = targetSize.Width;
-                    y = targetSize.Height < (2 * MARGIN) ? (-MARGIN + targetSize.Height / 2) : 0;
+                    y = targetSize.Height < (2 * c_margin) ? (-c_margin + targetSize.Height / 2) : 0;
                     return new CustomPopupPlacement(new Point(x, y), PopupPrimaryAxis.Horizontal);
                 case Placement.RightCenter:
                     x = targetSize.Width;
@@ -230,7 +224,7 @@ namespace ThinkSharp.FeatureTouring
                     return new CustomPopupPlacement(new Point(x, y), PopupPrimaryAxis.Horizontal);
                 case Placement.RightBottom:
                     x = targetSize.Width;
-                    y = targetSize.Height < (2 * MARGIN) ? (targetSize.Height - (popupSize.Height - MARGIN + targetSize.Height / 2)) : targetSize.Height - popupSize.Height;
+                    y = targetSize.Height < (2 * c_margin) ? (targetSize.Height - (popupSize.Height - c_margin + targetSize.Height / 2)) : targetSize.Height - popupSize.Height;
                     return new CustomPopupPlacement(new Point(x, y), PopupPrimaryAxis.Horizontal);
 
                 // Center

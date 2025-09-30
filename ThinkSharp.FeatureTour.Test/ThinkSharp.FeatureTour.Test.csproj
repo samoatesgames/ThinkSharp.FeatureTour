@@ -2,9 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net9-windows</TargetFramework>
-	<LangVersion>latest</LangVersion>
 	<UseWPF>true</UseWPF>
-	<ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
 
   <ItemGroup>

@@ -42,7 +42,7 @@ namespace ThinkSharp.FeatureTouring.Models
         /// </summary>
         public void Start()
         {
-            Log.Debug("Starting tour: " + (Name ?? "<null>"));
+            Log.Debug($"Starting tour: {(Name ?? "<null>")}");
             var run = new TourRun(this, 
                 TourHelper.VisualElementManager,
                 TourHelper.WindowManager,
@@ -54,7 +54,7 @@ namespace ThinkSharp.FeatureTouring.Models
             }
             catch (LicenseException licEx)
             {
-                MessageBox.Show("Your copy of FeatureTour is not licensed: " + licEx.Message, "FeatureTour not licensed", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"Your copy of FeatureTour is not licensed: {licEx.Message}", "FeatureTour not licensed", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
             catch (Exception ex)
             {

@@ -22,7 +22,7 @@ namespace ThinkSharp.FeatureTouring
         {
             var tour = FeatureTour.GetNavigator();
 
-            tour.IfCurrentStepEquals(ElementID.ButtonPushMeToo).GoNext();
+            tour.IfCurrentStepEquals(ElementId.ButtonPushMeToo).GoNext();
         }
     }
 }

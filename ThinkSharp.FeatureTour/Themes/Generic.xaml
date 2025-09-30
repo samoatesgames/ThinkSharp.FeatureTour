@@ -123,7 +123,7 @@
                                                     Foreground="{TemplateBinding Foreground}">
                                     </ContentControl>
                                 </Border>
-                                <Button Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding CmdClose}">
+                                <Button Grid.Row="0" Width="20" Height="20" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding CmdClose}">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Setter Property="Background" Value="{Binding Background, RelativeSource={RelativeSource FindAncestor, AncestorType=controls:TourControl}}" />
@@ -182,7 +182,7 @@
 
                         <!-- Top -->
 
-                        <Grid Grid.Row="0" Grid.ColumnSpan="3"
+                        <Grid Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0"
                               HorizontalAlignment="{Binding ActualPlacement, Converter={StaticResource PlacementToAlignmentConverter}, ConverterParameter={x:Static controls:BorderSide.Top}}"
                               Visibility="{Binding ActualPlacement, Converter={StaticResource PlacementToVisibilityConverter}, ConverterParameter={x:Static controls:BorderSide.Top}}"
                               Margin="{Binding BorderThickness, 
@@ -204,7 +204,7 @@
                         </Grid>
 
                         <!-- Bottom -->
-                        <Grid Grid.Row="2" Grid.ColumnSpan="3"
+                        <Grid Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0"
                               HorizontalAlignment="{Binding ActualPlacement, Converter={StaticResource PlacementToAlignmentConverter}, ConverterParameter={x:Static controls:BorderSide.Bottom}}"
                               Visibility="{Binding ActualPlacement, Converter={StaticResource PlacementToVisibilityConverter}, ConverterParameter={x:Static controls:BorderSide.Bottom}}"
                               Margin="{Binding BorderThickness, 
@@ -226,7 +226,7 @@
                         </Grid>
 
                         <!-- Left -->
-                        <Grid Grid.Column="0" Grid.RowSpan="3"
+                        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
                               VerticalAlignment="{Binding ActualPlacement, Converter={StaticResource PlacementToAlignmentConverter}, ConverterParameter={x:Static controls:BorderSide.Left}}"
                               Visibility="{Binding ActualPlacement, Converter={StaticResource PlacementToVisibilityConverter}, ConverterParameter={x:Static controls:BorderSide.Left}}"
                               Margin="{Binding BorderThickness, 
@@ -248,7 +248,7 @@
                         </Grid>
 
                         <!-- Right -->
-                        <Grid Grid.Column="2" Grid.RowSpan="3"
+                        <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="3"
                               VerticalAlignment="{Binding ActualPlacement, Converter={StaticResource PlacementToAlignmentConverter}, ConverterParameter={x:Static controls:BorderSide.Right}}"
                               Visibility="{Binding ActualPlacement, Converter={StaticResource PlacementToVisibilityConverter}, ConverterParameter={x:Static controls:BorderSide.Right}}"
                               Margin="{Binding BorderThickness, 

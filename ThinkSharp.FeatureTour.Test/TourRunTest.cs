@@ -20,7 +20,7 @@ namespace ThinkSharp.FeatureTouring.Test
             tour.Steps = null;
             try
             {
-                var tourRun = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
+                _ = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace ThinkSharp.FeatureTouring.Test
             tour.Steps = [];
             try
             {
-                var tourRun = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
+                _ = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -52,7 +52,7 @@ namespace ThinkSharp.FeatureTouring.Test
             tour.Steps = [null];
             try
             {
-                var tourRun = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
+                _ = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -68,7 +68,7 @@ namespace ThinkSharp.FeatureTouring.Test
             tour.Steps = [new Step(null, "Header", "Content")];
             try
             {
-                var tourRun = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
+                _ = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
                 Assert.Fail();
             }
             catch (Exception ex)
@@ -165,16 +165,16 @@ namespace ThinkSharp.FeatureTouring.Test
 
             Assert.AreEqual(tour.Steps[0], FeatureTour.CurrentStep);
 
-            Assert.IsTrue(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.ID).GoNext());
+            Assert.IsTrue(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.Id).GoNext());
             Assert.AreEqual(tour.Steps[1], FeatureTour.CurrentStep);
 
-            Assert.IsFalse(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.ID).GoNext());
+            Assert.IsFalse(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.Id).GoNext());
             Assert.AreEqual(tour.Steps[1], FeatureTour.CurrentStep);
 
-            Assert.IsTrue(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.ID).GoPrevious());
+            Assert.IsTrue(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.Id).GoPrevious());
             Assert.AreEqual(tour.Steps[0], FeatureTour.CurrentStep);
 
-            Assert.IsFalse(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.ID).GoPrevious());
+            Assert.IsFalse(navigator.IfCurrentStepEquals(FeatureTour.CurrentStep.Id).GoPrevious());
             Assert.AreEqual(tour.Steps[0], FeatureTour.CurrentStep);
 
             Assert.IsTrue(navigator.Close());
@@ -236,6 +236,7 @@ namespace ThinkSharp.FeatureTouring.Test
             Assert.AreEqual(step.Header, tourViewModel.Header);
         }
 
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         private static void AssertManagerIsClean(PopupNavigatorMock popupNavigator, WindowManagerMock windowManager)
         {
             Assert.IsTrue(popupNavigator.Reseted);

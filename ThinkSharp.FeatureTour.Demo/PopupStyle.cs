@@ -10,42 +10,42 @@ namespace ThinkSharp.FeatureTouring
 {
     public class PopupStyle : ObservableObject
     {
-        private Thickness myBorderThickness = new Thickness(3);
+        private Thickness m_myBorderThickness = new Thickness(3);
         public Thickness BorderThickness
         {
-            get => myBorderThickness;
-            set => SetProperty(ref myBorderThickness, value);
+            get => m_myBorderThickness;
+            set => SetProperty(ref m_myBorderThickness, value);
         }
 
         public double BorderThicknessValue
         {
-            get => myBorderThickness.Top;
+            get => m_myBorderThickness.Top;
             set => BorderThickness = new Thickness(value);
         }
 
-        private double myCornerRadius = 3;
+        private double m_myCornerRadius = 3;
         public double CornerRadius
         {
-            get => myCornerRadius;
-            set => SetProperty(ref myCornerRadius, value);
+            get => m_myCornerRadius;
+            set => SetProperty(ref m_myCornerRadius, value);
         }
 
-        private double myFontSize = 12;
+        private double m_myFontSize = 12;
         public double FontSize
         {
-            get => myFontSize;
+            get => m_myFontSize;
             set
             {
-                if (SetProperty(ref myFontSize, value))
+                if (SetProperty(ref m_myFontSize, value))
                     FeatureTour.GetNavigator().Close();
             }
         }
 
-        private Brush myForeground = new SolidColorBrush(Color.FromRgb(0x04, 0x35, 0x6c));
+        private Brush m_myForeground = new SolidColorBrush(Color.FromRgb(0x04, 0x35, 0x6c));
         public Brush Foreground
         {
-            get => myForeground;
-            set => SetProperty(ref myForeground, value);
+            get => m_myForeground;
+            set => SetProperty(ref m_myForeground, value);
         }
         public Color? ForegroundColor
         {
@@ -53,11 +53,11 @@ namespace ThinkSharp.FeatureTouring
             set => Foreground = value.HasValue ? new SolidColorBrush(value.Value) : Brushes.Transparent;
         }
 
-        private Brush myBackground = new SolidColorBrush(Color.FromRgb(0x68, 0x9a, 0xd3));
+        private Brush m_myBackground = new SolidColorBrush(Color.FromRgb(0x68, 0x9a, 0xd3));
         public Brush Background
         {
-            get => myBackground;
-            set => SetProperty(ref myBackground, value);
+            get => m_myBackground;
+            set => SetProperty(ref m_myBackground, value);
         }
         public Color? BackgroundColor
         {
@@ -65,11 +65,11 @@ namespace ThinkSharp.FeatureTouring
             set => Background = value.HasValue ? new SolidColorBrush(value.Value) : Brushes.Transparent;
         }
 
-        private Brush myBorderBrush = new SolidColorBrush(Color.FromRgb(0x27, 0x4f, 0x7d));
+        private Brush m_myBorderBrush = new SolidColorBrush(Color.FromRgb(0x27, 0x4f, 0x7d));
         public Brush BorderBrush
         {
-            get => myBorderBrush;
-            set => SetProperty(ref myBorderBrush, value);
+            get => m_myBorderBrush;
+            set => SetProperty(ref m_myBorderBrush, value);
         }
         public Color? BorderBrushColor
         {

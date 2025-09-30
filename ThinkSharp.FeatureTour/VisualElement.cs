@@ -12,16 +12,16 @@ namespace ThinkSharp.FeatureTouring
     /// </summary>
     internal class VisualElement
     {
-        private readonly WeakReference myElement;
+        private readonly WeakReference m_myElement;
         public VisualElement(FrameworkElement element)
         {
-            myElement = new WeakReference(element);
+            m_myElement = new WeakReference(element);
         }
 
-        public string ElementID { get; set; }
+        public string ElementId { get; set; }
         public Placement Placement { get; set; }
         public WindowTransisionBehavior WindowTransisionBehavior { get; set; }
-        public Guid WindowID { get; set; }
+        public Guid WindowId { get; set; }
 
         public DataTemplate GetTemplate(string name)
         {
@@ -32,17 +32,17 @@ namespace ThinkSharp.FeatureTouring
             {
                 var template = element.TryFindResource(name) as DataTemplate;
                 if (template == null)
-                    Log.Warn($"Could not find data template '{name}' relative to element with ID '{ElementID}'.");
+                    Log.Warn($"Could not find data template '{name}' relative to element with ID '{ElementId}'.");
                 return template;
             }
-            Log.Warn($"Unable to find element with ID '{ElementID}' (Maybe not visible anymore?). Data template '{name}' can not be applied.");
+            Log.Warn($"Unable to find element with ID '{ElementId}' (Maybe not visible anymore?). Data template '{name}' can not be applied.");
             return null;
         }
 
         public bool TryGetElement(out FrameworkElement element)
         {
-            element = myElement.Target as FrameworkElement;
-            return myElement.IsAlive;
+            element = m_myElement.Target as FrameworkElement;
+            return m_myElement.IsAlive;
         }
     }
 }

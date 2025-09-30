@@ -7,44 +7,44 @@ namespace ThinkSharp.FeatureTouring.Logging
 {
     public static class Log
     {
-        private static ILogger theLogger = new ConsoleLogger();
+        private static ILogger _theLogger = new ConsoleLogger();
 
         public static void SetLogger(ILogger logger)
         {
-            theLogger = logger ?? new NullLogger();
+            _theLogger = logger ?? new NullLogger();
         }
 
         public static void Debug(object message)
         {
-            theLogger.Debug(message);
+            _theLogger.Debug(message);
         }
         public static void Debug(object message, Exception exception)
         {
-            theLogger.Debug(message, exception);
+            _theLogger.Debug(message, exception);
         }
         public static void Info(object message)
         {
-            theLogger.Info(message);
+            _theLogger.Info(message);
         }
         public static void Info(object message, Exception exception)
         {
-            theLogger.Info(message, exception);
+            _theLogger.Info(message, exception);
         }
         public static void Warn(object message)
         {
-            theLogger.Warn(message);
+            _theLogger.Warn(message);
         }
         public static void Warn(object message, Exception exception)
         {
-            theLogger.Debug(message, exception);
+            _theLogger.Debug(message, exception);
         }
         public static void Error(object message)
         {
-            theLogger.Error(message);
+            _theLogger.Error(message);
         }
         public static void Error(object message, Exception exception)
         {
-            theLogger.Error(message, exception);
+            _theLogger.Error(message, exception);
         }
     }
 }

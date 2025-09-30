@@ -36,13 +36,13 @@ namespace ThinkSharp.FeatureTouring
 
     internal class TourRun : ITourRun
     {
-        private readonly Tour myTour;
-        private readonly IVisualElementManager myVisualElementManager;
-        private readonly IWindowManager myWindowManager;
-        private readonly IPopupNavigator myPopupNavigator;
-        private TourViewModel myTourViewModel;
-        private StepNode myCurrentStepNode;
-        private Guid myCurrentWindowID = Guid.Empty;
+        private readonly Tour m_myTour;
+        private readonly IVisualElementManager m_myVisualElementManager;
+        private readonly IWindowManager m_myWindowManager;
+        private readonly IPopupNavigator m_myPopupNavigator;
+        private TourViewModel m_myTourViewModel;
+        private StepNode m_myCurrentStepNode;
+        private Guid m_myCurrentWindowId;
 
         enum HandleWindowTransitionResult { ShowPopup, HidePopup, DoNothing }
 
@@ -52,19 +52,19 @@ namespace ThinkSharp.FeatureTouring
         internal TourRun(Tour tour, IVisualElementManager visualElementManager, IWindowManager windowManager, IPopupNavigator popupNavigator)
         {
             if (tour == null) throw new ArgumentNullException(nameof(tour));
-            if (tour.Steps == null) throw new ArgumentNullException("tour.Steps");
+            if (tour.Steps == null) throw new ArgumentNullException(nameof(tour.Steps));
             if (tour.Steps.Length == 0) throw new ArgumentException("Unable to start tour without steps");
             if (tour.Steps.Any(s => s == null)) throw new ArgumentException("Steps must not be null");
-            if (tour.Steps.Any(s => s.ElementID == null)) throw new ArgumentException("Step.ElementID must not be null");
+            if (tour.Steps.Any(s => s.ElementId == null)) throw new ArgumentException("Step.ElementID must not be null");
 
-            myTour = tour;
-            myVisualElementManager = visualElementManager ?? throw new ArgumentNullException(nameof(visualElementManager));
-            myWindowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
-            myPopupNavigator = popupNavigator ?? throw new ArgumentNullException(nameof(popupNavigator));
+            m_myTour = tour;
+            m_myVisualElementManager = visualElementManager ?? throw new ArgumentNullException(nameof(visualElementManager));
+            m_myWindowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            m_myPopupNavigator = popupNavigator ?? throw new ArgumentNullException(nameof(popupNavigator));
 
             windowManager.WindowActivated += WindowActivated;
             windowManager.WindowDeactivated += WindowDeactivated;
-            myCurrentWindowID = windowManager.GetActiveWindowID();
+            m_myCurrentWindowId = windowManager.GetActiveWindowId();
             InitStepNodes();
         }
         
@@ -75,7 +75,7 @@ namespace ThinkSharp.FeatureTouring
         {
             StepNode prevStepNode = null;
             var counter = 1;
-            foreach (var step in myTour.Steps)
+            foreach (var step in m_myTour.Steps)
             {
                 var stepNode = new StepNode(step)
                 {
@@ -83,7 +83,7 @@ namespace ThinkSharp.FeatureTouring
                     StepNo = counter++
                 };
                 if (prevStepNode == null)
-                    myCurrentStepNode = stepNode;
+                    m_myCurrentStepNode = stepNode;
                 else
                     prevStepNode.Next = stepNode;
                 prevStepNode = stepNode;
@@ -97,11 +97,11 @@ namespace ThinkSharp.FeatureTouring
         private void WindowActivated(object sender, WindowActivationChangedEventArgs e)
         {
             // Window changed
-            var previousWindowID = myCurrentWindowID;
-            if (e.WindowID != myCurrentWindowID)
+            var previousWindowId = m_myCurrentWindowId;
+            if (e.WindowId != m_myCurrentWindowId)
             {
-                myCurrentWindowID = e.WindowID;
-                var result = HandleWindowTransitionChange(previousWindowID);
+                m_myCurrentWindowId = e.WindowId;
+                var result = HandleWindowTransitionChange(previousWindowId);
                 switch (result)
                 {
                     case HandleWindowTransitionResult.HidePopup:
@@ -114,17 +114,17 @@ namespace ThinkSharp.FeatureTouring
             }
         }
 
-        private HandleWindowTransitionResult HandleWindowTransitionChange(Guid previousWindowID)
+        private HandleWindowTransitionResult HandleWindowTransitionChange(Guid previousWindowId)
         {
             // If current element is already on the new window, we don't need to go.
             // CASE: Window is just reactivated
-            var currentElement = myVisualElementManager.GetVisualElement(myCurrentStepNode.Step.ElementID, false);
+            var currentElement = m_myVisualElementManager.GetVisualElement(m_myCurrentStepNode.Step.ElementId, false);
             if (currentElement == null)
             {
-                Log.Warn("Could not find visual element with ElementID '" + myCurrentStepNode.Step.ElementID + "'");
+                Log.Warn($"Could not find visual element with ElementID '{m_myCurrentStepNode.Step.ElementId}'");
                 return HandleWindowTransitionResult.DoNothing;
             }
-            if (currentElement.WindowID == myCurrentWindowID)
+            if (currentElement.WindowId == m_myCurrentWindowId)
                 return HandleWindowTransitionResult.ShowPopup;
 
             var behavior = currentElement.WindowTransisionBehavior;
@@ -134,7 +134,7 @@ namespace ThinkSharp.FeatureTouring
             }
             if (behavior == WindowTransisionBehavior.Automatic)
             {
-                var wasPreviousParent = myWindowManager.IsParentWindow(previousWindowID, myCurrentWindowID);
+                var wasPreviousParent = m_myWindowManager.IsParentWindow(previousWindowId, m_myCurrentWindowId);
                 behavior = wasPreviousParent ? WindowTransisionBehavior.NextHide : WindowTransisionBehavior.NextPreviousHide;
             }
 
@@ -143,12 +143,12 @@ namespace ThinkSharp.FeatureTouring
             {
                 // otherwise, we will try to to the next element on the new window
                 // CASE: Open modal dialog with elements
-                var nextStep = myCurrentStepNode.NextStep;
+                var nextStep = m_myCurrentStepNode.NextStep;
                 if (nextStep != null)
                 {
-                    var nextElement = myVisualElementManager.GetVisualElement(nextStep.ElementID, true);
+                    var nextElement = m_myVisualElementManager.GetVisualElement(nextStep.ElementId, true);
                     // next element belongs to the new window
-                    if (nextElement != null && nextElement.WindowID == myCurrentWindowID)
+                    if (nextElement != null && nextElement.WindowId == m_myCurrentWindowId)
                     {
                         NextStep(true);
                         return HandleWindowTransitionResult.ShowPopup;
@@ -161,11 +161,11 @@ namespace ThinkSharp.FeatureTouring
             {
                 // otherwise we will try to go to the nears previous step for the current window
                 // CASE: Open modal dialog but do not pass all steps on that dialog and close the dialog
-                StepNode prevStepNode = myCurrentStepNode;
+                StepNode prevStepNode = m_myCurrentStepNode;
                 while ((prevStepNode = prevStepNode.Previous) != null)
                 {
-                    var prevElement = myVisualElementManager.GetVisualElement(prevStepNode.Step.ElementID, true);
-                    if (prevElement == null || prevElement.WindowID != myCurrentWindowID)
+                    var prevElement = m_myVisualElementManager.GetVisualElement(prevStepNode.Step.ElementId, true);
+                    if (prevElement == null || prevElement.WindowId != m_myCurrentWindowId)
                         continue;
                     SetStep(prevStepNode);
                     return HandleWindowTransitionResult.ShowPopup;
@@ -179,21 +179,21 @@ namespace ThinkSharp.FeatureTouring
         internal bool Start()
         {
             var factoryMethod = FeatureTour.ViewModelFactoryMethod;
-            myTourViewModel = factoryMethod == null 
+            m_myTourViewModel = factoryMethod == null 
                 ? new TourViewModel(this) 
                 : factoryMethod(this);
             
-            myPopupNavigator.StartTour(myTourViewModel);
+            m_myPopupNavigator.StartTour(m_myTourViewModel);
 
             // Go to first step
-            var success = SetStep(myCurrentStepNode);
+            var success = SetStep(m_myCurrentStepNode);
             if (!success) Close();
             return success;
         }
 
         private string GetSteps()
         {
-            return $"Step {myCurrentStepNode.StepNo}/{myTour.Steps.Length}";
+            return $"Step {m_myCurrentStepNode.StepNo}/{m_myTour.Steps.Length}";
         }
 
         private bool SetStep(StepNode nextStep, bool includeUnloaded = false)
@@ -203,30 +203,30 @@ namespace ThinkSharp.FeatureTouring
                 Log.Debug("SetStep: nextStep is null");
                 return false;
             }
-            Log.Debug("SetStep: '" + nextStep.Step.ID + "'");
+            Log.Debug($"SetStep: '{nextStep.Step.Id}'");
 
-            if (myCurrentStepNode != nextStep)
+            if (m_myCurrentStepNode != nextStep)
             {
-                FeatureTour.OnStepLeaved(myCurrentStepNode.Step);
-                myCurrentStepNode = nextStep;
+                FeatureTour.OnStepLeaved(m_myCurrentStepNode.Step);
+                m_myCurrentStepNode = nextStep;
             }
-            var step = myCurrentStepNode.Step;
+            var step = m_myCurrentStepNode.Step;
             FeatureTour.OnStepEntering(step);
 
             var app = Application.Current;
 
             VisualElement element;
             if (app == null)
-                element = myVisualElementManager.GetVisualElement(step.ElementID, includeUnloaded);
+                element = m_myVisualElementManager.GetVisualElement(step.ElementId, includeUnloaded);
             else
-                element = app.Dispatcher.Invoke(DispatcherPriority.ApplicationIdle, new Func<object>(() => myVisualElementManager.GetVisualElement(step.ElementID, includeUnloaded))) as VisualElement;
+                element = app.Dispatcher.Invoke(DispatcherPriority.ApplicationIdle, new Func<object>(() => m_myVisualElementManager.GetVisualElement(step.ElementId, includeUnloaded))) as VisualElement;
             if (element == null)
             {
                 LogWarningCouldNotFindElementFor(step);
                 return false;
             }
 
-            using (myPopupNavigator.MovePopupTo(element))
+            using (m_myPopupNavigator.MovePopupTo(element))
             {
                 InitializeViewModel(step, element);
 
@@ -242,34 +242,34 @@ namespace ThinkSharp.FeatureTouring
 
         private static void LogWarningCouldNotFindElementFor(Step step)
         {
-            var msg = "Could not find visual element with ElementID '" + step.ElementID + "'. Popup may not occur.";
+            var msg = $"Could not find visual element with ElementID '{step.ElementId}'. Popup may not occur.";
             msg += " Ensure that the visual element is available in the current view.";
             Log.Warn(msg);
         }
 
         private void InitializeViewModel(Step step, VisualElement element)
         {
-            Debug.Assert(myTourViewModel != null);
-            myTourViewModel.Header = step.Header;
-            myTourViewModel.Content = step.Content;
-            myTourViewModel.ContentTemplate = element.GetTemplate(step.ContentDataTemplateKey);
-            myTourViewModel.HeaderTemplate = element.GetTemplate(step.HeaderDataTemplateKey);
-            myTourViewModel.Steps = GetSteps();
-            myTourViewModel.CurrentStepNo = myCurrentStepNode.StepNo;
-            myTourViewModel.TotalStepsCount = myTour.Steps.Length;
-            myTourViewModel.ShowDoIt = ShowDoIt();
-            myTourViewModel.ShowNext = step.ShowNextButton ?? myTour.ShowNextButtonDefault;
+            Debug.Assert(m_myTourViewModel != null);
+            m_myTourViewModel.Header = step.Header;
+            m_myTourViewModel.Content = step.Content;
+            m_myTourViewModel.ContentTemplate = element.GetTemplate(step.ContentDataTemplateKey);
+            m_myTourViewModel.HeaderTemplate = element.GetTemplate(step.HeaderDataTemplateKey);
+            m_myTourViewModel.Steps = GetSteps();
+            m_myTourViewModel.CurrentStepNo = m_myCurrentStepNode.StepNo;
+            m_myTourViewModel.TotalStepsCount = m_myTour.Steps.Length;
+            m_myTourViewModel.ShowDoIt = ShowDoIt();
+            m_myTourViewModel.ShowNext = step.ShowNextButton ?? m_myTour.ShowNextButtonDefault;
 
-            if (myCurrentStepNode.Next == null)
-                myTourViewModel.SetCloseText();
-            myTourViewModel.Placement = element.Placement;
+            if (m_myCurrentStepNode.Next == null)
+                m_myTourViewModel.SetCloseText();
+            m_myTourViewModel.Placement = element.Placement;
         }
 
         // Properties (for testing)
         // ////////////////////////////////////////////////////////////////////
 
-        public Step CurrentStep => myCurrentStepNode.Step;
-        internal int CurrentStepNo => myCurrentStepNode.StepNo;
+        public Step CurrentStep => m_myCurrentStepNode.Step;
+        internal int CurrentStepNo => m_myCurrentStepNode.StepNo;
 
         // Interface implementations
         // ////////////////////////////////////////////////////////////////////
@@ -278,33 +278,33 @@ namespace ThinkSharp.FeatureTouring
 
         public bool NextStep(bool includeUnloaded = false)
         {
-            return SetStep(myCurrentStepNode.Next, includeUnloaded);
+            return SetStep(m_myCurrentStepNode.Next, includeUnloaded);
         }
 
         public bool PreviousStep()
         {
-            return SetStep(myCurrentStepNode.Previous);
+            return SetStep(m_myCurrentStepNode.Previous);
         }
 
         public void Close()
         {
-            myPopupNavigator.ExitTour();
-            myWindowManager.WindowActivated -= WindowActivated;
-            myWindowManager.WindowDeactivated -= WindowDeactivated;
+            m_myPopupNavigator.ExitTour();
+            m_myWindowManager.WindowActivated -= WindowActivated;
+            m_myWindowManager.WindowDeactivated -= WindowDeactivated;
 
-            FeatureTour.OnStepLeaved(myCurrentStepNode.Step);
-            FeatureTour.OnClosed(myCurrentStepNode.Step);
+            FeatureTour.OnStepLeaved(m_myCurrentStepNode.Step);
+            FeatureTour.OnClosed(m_myCurrentStepNode.Step);
             FeatureTour.SetCurrentRunNull();
         }
 
         internal bool CanPreviousStep()
         {
-            return CanGoToStep(myCurrentStepNode.PreviousStep);
+            return CanGoToStep(m_myCurrentStepNode.PreviousStep);
         }
 
         public bool CanNextStep()
         {
-            return CanGoToStep(myCurrentStepNode.NextStep);
+            return CanGoToStep(m_myCurrentStepNode.NextStep);
         }
 
         private bool CanGoToStep(Step step)
@@ -312,15 +312,15 @@ namespace ThinkSharp.FeatureTouring
             if (step == null)
                 return false;
 
-            if (myTour.EnableNextButtonAlways)
+            if (m_myTour.EnableNextButtonAlways)
                 return true;
 
             // step entering is usually used to create a state where the visual element is available.
             if (FeatureTour.HasStepEnteringAttached(step))
                 return true;
 
-            var visualElement = myVisualElementManager.GetVisualElement(step.ElementID, true);
-            if (visualElement == null || visualElement.WindowID != myCurrentWindowID)
+            var visualElement = m_myVisualElementManager.GetVisualElement(step.ElementId, true);
+            if (visualElement == null || visualElement.WindowId != m_myCurrentWindowId)
                 return false;
 
             return true;
@@ -328,17 +328,17 @@ namespace ThinkSharp.FeatureTouring
 
         public void DoIt()
         {
-            FeatureTour.Do(myCurrentStepNode.Step);
+            FeatureTour.Do(m_myCurrentStepNode.Step);
         }
 
         public bool CanDoIt()
         {
-            return FeatureTour.CanDo(myCurrentStepNode.Step);
+            return FeatureTour.CanDo(m_myCurrentStepNode.Step);
         }
 
         public bool ShowDoIt()
         {
-            return FeatureTour.HasDoableAttached(myCurrentStepNode.Step);
+            return FeatureTour.HasDoableAttached(m_myCurrentStepNode.Step);
         }
 
         #endregion

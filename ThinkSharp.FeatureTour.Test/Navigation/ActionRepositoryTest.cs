@@ -13,7 +13,7 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         public void TestContains()
         {
             var repo = new ActionRepository();
-            repo.AddAction("Hello", s => { });
+            repo.AddAction("Hello", _ => { });
             Assert.IsTrue(repo.Contains("Hello"));
             Assert.IsTrue(repo.Contains("hello"));
             Assert.IsFalse(repo.Contains(" hello"));
@@ -39,8 +39,8 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         {
             int i = 0;
             var repo = new ActionRepository();
-            repo.AddAction("add", s => i++);
-            repo.AddAction("add2", s => i++, s => true);
+            repo.AddAction("add", _ => i++);
+            repo.AddAction("add2", _ => i++, _ => true);
             repo.Execute("add", null);
             Assert.AreEqual(1, i);
             repo.Execute("add2", null);
@@ -51,8 +51,8 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         public void TestCanExecute()
         {
             var repo = new ActionRepository();
-            repo.AddAction("true", s => { }, s => true);
-            repo.AddAction("false", s => { }, s => false);
+            repo.AddAction("true", _ => { }, _ => true);
+            repo.AddAction("false", _ => { }, _ => false);
             Assert.IsTrue(repo.CanExecute("true", null));
             Assert.IsFalse(repo.CanExecute("false", null));
             Assert.IsFalse(repo.CanExecute("notExisting", null));
@@ -63,7 +63,7 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         {
             int i = 0;
             var repo = new ActionRepository();
-            var release = repo.AddAction("a", s => i++);
+            var release = repo.AddAction("a", _ => i++);
             Assert.IsTrue(repo.Contains("a"));
             repo.Execute("a", null);
             Assert.AreEqual(1, i);
@@ -78,7 +78,7 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         {
             int i = 0;
             var repo = new ActionRepository();
-            var release = repo.AddAction("a", s => i++, s => true);
+            var release = repo.AddAction("a", _ => i++, _ => true);
             Assert.IsTrue(repo.Contains("a"));
             repo.Execute("a", null);
             Assert.AreEqual(1, i);
@@ -96,8 +96,8 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
             int a = 0;
             int b = 0;
             var repo = new ActionRepository();
-            repo.AddAction("add", s => a++);
-            repo.AddAction("add", s => b++, s => true);
+            repo.AddAction("add", _ => a++);
+            repo.AddAction("add", _ => b++, _ => true);
             repo.Execute("add", null);
             Assert.AreEqual(0, a);
             Assert.AreEqual(1, b);
@@ -106,9 +106,8 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         [TestMethod]
         public void TestClear()
         {
-            int b = 0;
             var repo = new ActionRepository();
-            repo.AddAction("add", s => b++, s => true);
+            repo.AddAction("add", _ => { }, _ => true);
             Assert.AreEqual(1, repo.CanExecuteCount);
             Assert.AreEqual(1, repo.ExecuteCount);
             repo.Clear();
