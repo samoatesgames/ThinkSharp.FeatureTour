@@ -1,16 +1,16 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Text;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using ThinkSharp.FeatureTouring.Navigation;
 using ThinkSharp.FeatureTouring.Touring;
 
 namespace ThinkSharp.FeatureTouring
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ObservableObject
     {
         private ICommand _cmdStartPositioning;
         private ICommand _cmdStartIntroduction;
@@ -189,43 +189,43 @@ namespace ThinkSharp.FeatureTouring
         public Placement Placement
         {
             get { return _placement; }
-            set { Set("Placement", ref _placement, value); }
+            set { SetProperty(ref _placement, value, "Placement"); }
         }
         
         public int ColorSchemaIndex
         {
             get { return _colorSchemaIndex; }
-            set { Set("ColorSchemaIndex", ref _colorSchemaIndex, value); }
+            set { SetProperty(ref _colorSchemaIndex, value, "ColorSchemaIndex"); }
         }
 
         public int TabIndex
         {
             get { return _tabIndex; }
-            set { Set("TabIndex", ref _tabIndex, value); }
+            set { SetProperty(ref _tabIndex, value, "TabIndex"); }
         }
 
         public string Path
         {
             get { return _path; }
-            set { Set("Path", ref _path, value); }
+            set { SetProperty(ref _path, value, "Path"); }
         }
 
         public string Result
         {
             get { return _result; }
-            set { Set("Result", ref _result, value); }
+            set { SetProperty(ref _result, value, "Result"); }
         }
 
         public int SelectedIndex
         {
             get { return _selectedIndex; }
-            set { Set("SelectedIndex", ref _selectedIndex, value); }
+            set { SetProperty(ref _selectedIndex, value, "SelectedIndex"); }
         }
 
         public string StyleText
         {
             get { return _styleText; }
-            set { Set("StyleText", ref _styleText, value); }
+            set { SetProperty(ref _styleText, value, "StyleText"); }
         }
 
         public PopupStyle PopupStyle => myPopupStyle;

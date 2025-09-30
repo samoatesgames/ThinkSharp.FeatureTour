@@ -6,18 +6,18 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Media;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using ThinkSharp.FeatureTouring.Navigation;
 
 namespace ThinkSharp.FeatureTouring
 {
-    public class PopupStyle : ViewModelBase
+    public class PopupStyle : ObservableObject
     {
         private Thickness myBorderThickness = new Thickness(3);
         public Thickness BorderThickness
         {
             get { return myBorderThickness; }
-            set { Set(() => BorderThickness, ref myBorderThickness, value); }
+            set { SetProperty(ref myBorderThickness, value, "BorderThickness"); }
         }
 
         public double BorderThicknessValue
@@ -30,7 +30,7 @@ namespace ThinkSharp.FeatureTouring
         public double CornerRadius
         {
             get { return myCornerRadius; }
-            set { Set(() => CornerRadius, ref myCornerRadius, value); }
+            set { SetProperty(ref myCornerRadius, value, "CornerRadius"); }
         }
 
         private double myFontSize = 12;
@@ -39,7 +39,7 @@ namespace ThinkSharp.FeatureTouring
             get { return myFontSize; }
             set
             {
-                if (Set(() => FontSize, ref myFontSize, value))
+                if (SetProperty(ref myFontSize, value, "FontSize"))
                     FeatureTour.GetNavigator().Close();
             }
         }
@@ -48,7 +48,7 @@ namespace ThinkSharp.FeatureTouring
         public Brush Foreground
         {
             get { return myForeground; }
-            set { Set(() => Foreground, ref myForeground, value); }
+            set { SetProperty(ref myForeground, value, "Foreground"); }
         }
         public Color? ForegroundColor
         {
@@ -60,7 +60,7 @@ namespace ThinkSharp.FeatureTouring
         public Brush Background
         {
             get { return myBackground; }
-            set { Set(() => Background, ref myBackground, value); }
+            set { SetProperty(ref myBackground, value, "Background"); }
         }
         public Color? BackgroundColor
         {
@@ -72,7 +72,7 @@ namespace ThinkSharp.FeatureTouring
         public Brush BorderBrush
         {
             get { return myBorderBrush; }
-            set { Set(() => BorderBrush, ref myBorderBrush, value); }
+            set { SetProperty(ref myBorderBrush, value, "BorderBrush"); }
         }
         public Color? BorderBrushColor
         {

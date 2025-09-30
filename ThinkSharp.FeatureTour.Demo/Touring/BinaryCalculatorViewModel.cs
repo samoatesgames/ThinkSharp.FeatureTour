@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace ThinkSharp.FeatureTouring.Touring
 {
-    public class BinaryCalculatorViewModel : ViewModelBase
+    public class BinaryCalculatorViewModel : ObservableObject
     {
         private string _text = string.Empty;
         private string _operator = "";
@@ -18,7 +18,7 @@ namespace ThinkSharp.FeatureTouring.Touring
         public string Text
         {
             get { return _text; }
-            set { Set("Text", ref _text, value); }
+            set { SetProperty(ref _text, value, "Text"); }
         }
         public ICommand CmdZero => new RelayCommand(() => Text = (EnteringNumber ? Text : "") + "0");
         public ICommand CmdOne => new RelayCommand(() => Text = (EnteringNumber ? Text : "") + "1");

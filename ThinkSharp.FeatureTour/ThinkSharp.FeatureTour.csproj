@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net9-windows</TargetFramework>
     <OutputType>Library</OutputType>
     <RootNamespace>ThinkSharp.FeatureTouring</RootNamespace>
     <UseWPF>true</UseWPF>
@@ -14,14 +14,6 @@
     <DefineConstants>TRACE;NET40</DefineConstants>
     <DocumentationFile>bin\Release\ThinkSharp.FeatureTour.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.Management" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data.DataSetExtensions" />
-  </ItemGroup>
   <ItemGroup>
     <AppDesigner Include="Properties\" />
     <None Update="Thinksharp.FeatureTour.nuspec">
