@@ -1,11 +1,7 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -30,9 +26,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </param>
         protected internal TourViewModel(ITourRun tourRun)
         {
-            if (tourRun == null)
-                throw new ArgumentNullException(nameof(tourRun));
-            myTourRun = tourRun;
+            myTourRun = tourRun ?? throw new ArgumentNullException(nameof(tourRun));
             CmdDoIt = new RelayCommand(o => myTourRun.DoIt(), o => myTourRun.CanDoIt());
             CmdClose = new RelayCommand(o => myTourRun.Close());
             CmdNext = new RelayCommand(o =>
@@ -50,8 +44,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private object myContent;
         public object Content
         {
-            get { return myContent; }
-            set { SetValue("Content", ref myContent, value); }
+            get => myContent;
+            set => SetValue("Content", ref myContent, value);
         }
 
         #endregion
@@ -61,8 +55,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private object myHeader;
         public object Header
         {
-            get { return myHeader; }
-            set { SetValue("Header", ref myHeader, value); }
+            get => myHeader;
+            set => SetValue("Header", ref myHeader, value);
         }
 
         #endregion
@@ -73,8 +67,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         [Obsolete("Will be removed in furture releases.")]
         public string Steps
         {
-            get { return mySteps; }
-            set { SetValue("Steps", ref mySteps, value); }
+            get => mySteps;
+            set => SetValue("Steps", ref mySteps, value);
         }
 
         #endregion
@@ -84,7 +78,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private Placement myPlacement;
         public Placement Placement
         {
-            get { return myPlacement; }
+            get => myPlacement;
             set
             {
                 if (SetValue("Placement", ref myPlacement, value))
@@ -99,8 +93,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private Placement myActualPlacement;
         public Placement ActualPlacement
         {
-            get { return myActualPlacement; }
-            set { SetValue("ActualPlacement", ref myActualPlacement, value); }
+            get => myActualPlacement;
+            set => SetValue("ActualPlacement", ref myActualPlacement, value);
         }
 
         #endregion
@@ -110,8 +104,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private DataTemplate myContentTemplate;
         public DataTemplate ContentTemplate
         {
-            get { return myContentTemplate; }
-            set { SetValue("ContentTemplate", ref myContentTemplate, value); }
+            get => myContentTemplate;
+            set => SetValue("ContentTemplate", ref myContentTemplate, value);
         }
 
         #endregion
@@ -121,8 +115,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private DataTemplate myHeaderTemplate;
         public DataTemplate HeaderTemplate
         {
-            get { return myHeaderTemplate; }
-            set { SetValue("HeaderTemplate", ref myHeaderTemplate, value); }
+            get => myHeaderTemplate;
+            set => SetValue("HeaderTemplate", ref myHeaderTemplate, value);
         }
 
         #endregion
@@ -133,8 +127,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private string myButtonText;
         public string ButtonText
         {
-            get { return myButtonText; }
-            set { SetValue("ButtonText", ref myButtonText, value); }
+            get => myButtonText;
+            set => SetValue("ButtonText", ref myButtonText, value);
         }
 
         internal void SetCloseText()
@@ -150,8 +144,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private bool myShowDoIt;
         public bool ShowDoIt
         {
-            get { return myShowDoIt; }
-            set { SetValue("ShowDoIt", ref myShowDoIt, value); }
+            get => myShowDoIt;
+            set => SetValue("ShowDoIt", ref myShowDoIt, value);
         }
 
         #endregion
@@ -161,8 +155,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         private bool myShowNext;
         public bool ShowNext
         {
-            get { return myShowNext || ButtonText == myClose; }
-            set { SetValue("ShowNext", ref myShowNext, value); }
+            get => myShowNext || ButtonText == myClose;
+            set => SetValue("ShowNext", ref myShowNext, value);
         }
 
         #endregion
@@ -175,7 +169,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         public int CurrentStepNo
         {
-            get { return myCurrentStepNo; }
+            get => myCurrentStepNo;
             internal set
             {
                 if (SetValue("CurrentStepNo", ref myCurrentStepNo, value))
@@ -193,8 +187,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         public int TotalStepsCount
         {
-            get { return myTotalStepsCount; }
-            internal set { SetValue("TotalStepsCount", ref myTotalStepsCount, value); }
+            get => myTotalStepsCount;
+            internal set => SetValue("TotalStepsCount", ref myTotalStepsCount, value);
         }
 
         #endregion
@@ -207,8 +201,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         public bool HasTourFinished
         {
-            get { return myHasTourFinished; }
-            internal set { SetValue("HasTourFinished", ref myHasTourFinished, value); }
+            get => myHasTourFinished;
+            internal set => SetValue("HasTourFinished", ref myHasTourFinished, value);
         }
 
         #endregion

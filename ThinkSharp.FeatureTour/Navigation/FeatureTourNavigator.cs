@@ -1,10 +1,10 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Diagnostics;
+using ThinkSharp.FeatureTouring.Logging;
 using ThinkSharp.FeatureTouring.Models;
 using ThinkSharp.FeatureTouring.ViewModels;
-using ThinkSharp.FeatureTouring.Logging;
 
 namespace ThinkSharp.FeatureTouring.Navigation
 {
@@ -90,7 +90,7 @@ namespace ThinkSharp.FeatureTouring.Navigation
     /// </summary>
     public class FeatureTour : IFeatureTourNavigator
     {
-        private static ITourRun theCurrentTourRun = null;
+        private static ITourRun theCurrentTourRun;
 
         private static readonly ITourNavigator theNullNavigator = new NullTourNavigator();
         private static readonly ITourExecution theNullExecution = new NullTourExecution();

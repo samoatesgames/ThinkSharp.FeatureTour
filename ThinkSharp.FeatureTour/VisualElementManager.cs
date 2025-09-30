@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,8 +73,7 @@ namespace ThinkSharp.FeatureTouring
         {
             foreach (var visualElement in myVisualElements.ToArray())
             {
-                FrameworkElement element;
-                if (visualElement.TryGetElement(out element))
+                if (visualElement.TryGetElement(out var element))
                 {
                     // Do only return loaded elements but do not remove unloaded elements
                     // because it is possible that elements get temporary unloaded (e.g. on
@@ -164,11 +164,16 @@ namespace ThinkSharp.FeatureTouring
             {
                 myViewModel = viewModel;
 
-                myPopup = new Popup();
-                myPopup.AllowsTransparency = true;
-                myPopup.Child = new TourControl();
-                (myPopup.Child as FrameworkElement).DataContext = myViewModel;
-                myPopup.Placement = PlacementMode.Custom;
+                var tourControl = new TourControl();
+                myPopup = new Popup
+                {
+                    AllowsTransparency = true,
+                    Child = tourControl,
+                    Placement = PlacementMode.Custom
+                };
+
+                tourControl.DataContext = myViewModel;
+
                 myPopup.CustomPopupPlacementCallback += CustomPopupPlacementCallback;
                 myPopup.Opened += (s, e) => UpdatePopupPosition();
             }
@@ -189,8 +194,7 @@ namespace ThinkSharp.FeatureTouring
                 var vm = myViewModel;
                 if (vm != null)
                 {
-                    var targetFrameworkElement = myPopup.PlacementTarget as FrameworkElement;
-                    if (targetFrameworkElement != null && targetFrameworkElement.IsLoaded)
+                    if (myPopup.PlacementTarget is FrameworkElement { IsLoaded: true })
                     {
                         vm.ActualPlacement = myPopup.GetActualPlacement(vm.Placement);
                     }
@@ -249,8 +253,7 @@ namespace ThinkSharp.FeatureTouring
         {
             HidePopup();
             Log.Debug("MovePopupTo: " + visualElement.ElementID);
-            var element = (FrameworkElement)null;
-            if (visualElement.TryGetElement(out element))
+            if (visualElement.TryGetElement(out var element))
             {
                 myPopup?.UpdatePlacementTarget(element);
             }
@@ -329,8 +332,7 @@ namespace ThinkSharp.FeatureTouring
             if (activeWindow == null)
                 return Guid.Empty;
 
-            Guid windowID;
-            if (!myReferencedWindows.TryGetValue(activeWindow, out windowID))
+            if (!myReferencedWindows.TryGetValue(activeWindow, out var windowID))
                 return Guid.Empty;
 
             return windowID;
@@ -359,8 +361,7 @@ namespace ThinkSharp.FeatureTouring
                 return lastWindow.Value;
             }
 
-            Guid guid;
-            if (!myReferencedWindows.TryGetValue(window, out guid))
+            if (!myReferencedWindows.TryGetValue(window, out var guid))
             {
                 guid = IsMainWindow(window) ? Guid.Empty : Guid.NewGuid();
                 myReferencedWindows.Add(window, guid);
@@ -396,10 +397,8 @@ namespace ThinkSharp.FeatureTouring
                 window.Closed -= WindowClosed;
 
                 // remove references (element and window)
-                var guid = Guid.Empty;
-                if (myReferencedWindows.TryGetValue(window, out guid))
+                if (myReferencedWindows.Remove(window, out var guid))
                 {
-                    myReferencedWindows.Remove(window);
                     WindowRemoved?.Invoke(this, new WindowActivationChangedEventArgs(guid, false));
                 }
             }
@@ -440,9 +439,10 @@ namespace ThinkSharp.FeatureTouring
             if (h == null)
                 return false;
 
-            var window = sender as Window;
-            Guid guid;
-            if (myReferencedWindows.TryGetValue(window, out guid))
+            if (sender is not Window window)
+                return false;
+
+            if (myReferencedWindows.TryGetValue(window, out var guid))
             {
                 var args = new WindowActivationChangedEventArgs(guid, showPopup);
                 h(this, args);

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -41,7 +41,7 @@ namespace ThinkSharp.FeatureTouring
         private readonly IWindowManager myWindowManager;
         private readonly IPopupNavigator myPopupNavigator;
         private TourViewModel myTourViewModel;
-        private StepNode myCurrentStepNode = null;
+        private StepNode myCurrentStepNode;
         private Guid myCurrentWindowID = Guid.Empty;
 
         enum HandleWindowTransitionResult { ShowPopup, HidePopup, DoNothing }
@@ -51,19 +51,16 @@ namespace ThinkSharp.FeatureTouring
 
         internal TourRun(Tour tour, IVisualElementManager visualElementManager, IWindowManager windowManager, IPopupNavigator popupNavigator)
         {
-            if (tour == null) throw new ArgumentNullException("tour");
+            if (tour == null) throw new ArgumentNullException(nameof(tour));
             if (tour.Steps == null) throw new ArgumentNullException("tour.Steps");
             if (tour.Steps.Length == 0) throw new ArgumentException("Unable to start tour without steps");
             if (tour.Steps.Any(s => s == null)) throw new ArgumentException("Steps must not be null");
             if (tour.Steps.Any(s => s.ElementID == null)) throw new ArgumentException("Step.ElementID must not be null");
-            if (visualElementManager == null) throw new ArgumentNullException("visualElementManager");
-            if (windowManager == null) throw new ArgumentNullException("windowManager");
-            if (popupNavigator == null) throw new ArgumentNullException("popupNavigator");
 
             myTour = tour;
-            myVisualElementManager = visualElementManager;
-            myWindowManager = windowManager;
-            myPopupNavigator = popupNavigator;
+            myVisualElementManager = visualElementManager ?? throw new ArgumentNullException(nameof(visualElementManager));
+            myWindowManager = windowManager ?? throw new ArgumentNullException(nameof(windowManager));
+            myPopupNavigator = popupNavigator ?? throw new ArgumentNullException(nameof(popupNavigator));
 
             windowManager.WindowActivated += WindowActivated;
             windowManager.WindowDeactivated += WindowDeactivated;
@@ -252,7 +249,7 @@ namespace ThinkSharp.FeatureTouring
 
         private void InitializeViewModel(Step step, VisualElement element)
         {
-            Debug.Assert(myTourViewModel != null, "myTourViewModel != null");
+            Debug.Assert(myTourViewModel != null);
             myTourViewModel.Header = step.Header;
             myTourViewModel.Content = step.Content;
             myTourViewModel.ContentTemplate = element.GetTemplate(step.ContentDataTemplateKey);

@@ -1,13 +1,8 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using ThinkSharp.FeatureTouring.Models;
+using ThinkSharp.FeatureTouring.Navigation;
 using ThinkSharp.FeatureTouring.ViewModels;
 
 namespace ThinkSharp.FeatureTouring.Test.Navigation
@@ -24,19 +19,19 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
         public void TestSetFactoryMethod()
         {
             ITourRun tourRun = null;
-            FeatureTouring.Navigation.FeatureTour.SetViewModelFactoryMethod(
+            FeatureTour.SetViewModelFactoryMethod(
                 run =>
                 {
                     tourRun = run;
                     return new TestTourViewModel(run);
                 });
-            var tour = new Tour()
+            var tour = new Tour
             {
                 Name = "Test",
-                Steps = new[]
-                {
+                Steps =
+                [
                     new Step("ID1", "Header", "Content")
-                },
+                ],
             };
 
             tour.Start();

@@ -1,9 +1,7 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -14,11 +12,11 @@ namespace ThinkSharp.FeatureTouring.Touring
     {
         private string _text = string.Empty;
         private string _operator = "";
-        private int _result = 0;
+        private int _result;
         public string Text
         {
-            get { return _text; }
-            set { SetProperty(ref _text, value, "Text"); }
+            get => _text;
+            set => SetProperty(ref _text, value);
         }
         public ICommand CmdZero => new RelayCommand(() => Text = (EnteringNumber ? Text : "") + "0");
         public ICommand CmdOne => new RelayCommand(() => Text = (EnteringNumber ? Text : "") + "1");
@@ -63,9 +61,6 @@ namespace ThinkSharp.FeatureTouring.Touring
             return Convert.ToString(_result, 2);
         }
 
-        private bool EnteringNumber
-        {
-            get { return Text != "+" && Text != "-" && Text != ""; }
-        }
+        private bool EnteringNumber => Text != "+" && Text != "-" && Text != "";
     }
 }

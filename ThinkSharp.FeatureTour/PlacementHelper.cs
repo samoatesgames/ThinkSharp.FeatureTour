@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,8 +41,7 @@ namespace ThinkSharp.FeatureTouring
             var child = popup.Child;
             if (child == null) return placement;
 
-            var hwndSource = PresentationSource.FromVisual(child) as HwndSource;
-            if (hwndSource == null) return placement;
+            if (PresentationSource.FromVisual(child) is not HwndSource hwndSource) return placement;
 
             // If desired placement does not fir on screen, another placement will be used. That placement will be determined by popup automatically.
             IntPtr popupHandle = hwndSource.Handle;

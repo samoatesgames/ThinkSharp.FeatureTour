@@ -1,9 +1,8 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Windows;
-using System.Windows.Controls;
-using ThinkSharp.FeatureTouring.Navigation;
 
 namespace ThinkSharp.FeatureTouring
 {
@@ -52,8 +51,7 @@ namespace ThinkSharp.FeatureTouring
             DependencyProperty.RegisterAttached("ElementID", typeof(string), typeof(TourHelper), 
             new FrameworkPropertyMetadata("", FrameworkPropertyMetadataOptions.None, (s, e) =>
             {
-                var element = s as FrameworkElement;
-                if (element == null) throw new InvalidOperationException("ElementID is only valid for objects of type FrameworkElement");
+                if (s is not FrameworkElement element) throw new InvalidOperationException("ElementID is only valid for objects of type FrameworkElement");
                 theVisualElementManager.ElementAdded(element);
             }));
 
@@ -87,8 +85,7 @@ namespace ThinkSharp.FeatureTouring
         public static readonly DependencyProperty PlacementProperty =
             DependencyProperty.RegisterAttached("Placement", typeof(Placement), typeof(TourHelper), new PropertyMetadata(Placement.TopLeft, (s, e) =>
             {
-                var element = s as UIElement;
-                if (element != null) theVisualElementManager.ElementPropertyChanged(element, (el, ve) => ve.Placement = GetPlacement(el));
+                if (s is UIElement element) theVisualElementManager.ElementPropertyChanged(element, (el, ve) => ve.Placement = GetPlacement(el));
             }));
 
         #endregion
@@ -121,8 +118,7 @@ namespace ThinkSharp.FeatureTouring
         public static readonly DependencyProperty WindowTransisionBehaviorProperty =
             DependencyProperty.RegisterAttached("WindowTransisionBehavior", typeof(WindowTransisionBehavior), typeof(TourHelper), new PropertyMetadata(WindowTransisionBehavior.Automatic, (s, e) =>
             {
-                var element = s as UIElement;
-                if (element != null) theVisualElementManager.ElementPropertyChanged(element, (el, ve) => ve.WindowTransisionBehavior = GetWindowTransisionBehavior(el));
+                if (s is UIElement element) theVisualElementManager.ElementPropertyChanged(element, (el, ve) => ve.WindowTransisionBehavior = GetWindowTransisionBehavior(el));
             }));
 
         #endregion

@@ -1,9 +1,6 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
-using System;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Globalization;
+
 using System.Windows;
 using System.Windows.Controls;
 using ThinkSharp.FeatureTouring.Models;
@@ -41,8 +38,8 @@ namespace ThinkSharp.FeatureTouring.Controls
         /// </summary>
         public object Content
         {
-            get { return (object)GetValue(ContentProperty); }
-            set { SetValue(ContentProperty, value); }
+            get => GetValue(ContentProperty);
+            set => SetValue(ContentProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Content.  This enables animation, styling, binding, etc...
@@ -56,8 +53,8 @@ namespace ThinkSharp.FeatureTouring.Controls
         /// </summary>
         public object Header
         {
-            get { return (object)GetValue(HeaderProperty); }
-            set { SetValue(HeaderProperty, value); }
+            get => GetValue(HeaderProperty);
+            set => SetValue(HeaderProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Header.  This enables animation, styling, binding, etc...
@@ -66,8 +63,8 @@ namespace ThinkSharp.FeatureTouring.Controls
         
         public Placement Placement
         {
-            get { return (Placement)GetValue(PlacementProperty); }
-            set { SetValue(PlacementProperty, value); }
+            get => (Placement)GetValue(PlacementProperty);
+            set => SetValue(PlacementProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for Placement.  This enables animation, styling, binding, etc...
@@ -76,8 +73,8 @@ namespace ThinkSharp.FeatureTouring.Controls
         
         public double CornerRadius
         {
-            get { return (double)GetValue(CornerRadiusProperty); }
-            set { SetValue(CornerRadiusProperty, value); }
+            get => (double)GetValue(CornerRadiusProperty);
+            set => SetValue(CornerRadiusProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for CornerRadius.  This enables animation, styling, binding, etc...

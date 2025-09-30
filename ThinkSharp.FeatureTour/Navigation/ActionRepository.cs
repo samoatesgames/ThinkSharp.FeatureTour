@@ -1,10 +1,11 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using ThinkSharp.FeatureTouring.Helper;
-using ThinkSharp.FeatureTouring.Models;
 using ThinkSharp.FeatureTouring.Logging;
+using ThinkSharp.FeatureTouring.Models;
 
 namespace ThinkSharp.FeatureTouring.Navigation
 {
@@ -19,7 +20,7 @@ namespace ThinkSharp.FeatureTouring.Navigation
         public IReleasable AddAction(string name, Action<Step> executeAction)
         {
             if (executeAction == null)
-                throw new ArgumentNullException("executeAction");
+                throw new ArgumentNullException(nameof(executeAction));
 
             var execute = new ExecuteAction(executeAction);
 
@@ -32,8 +33,7 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
             return new ReleasableAction(() =>
             {
-                ExecuteAction executeStored;
-                if (myExecuteActions.TryGetValue(name, out executeStored) && executeStored == execute)
+                if (myExecuteActions.TryGetValue(name, out var executeStored) && executeStored == execute)
                     myExecuteActions.Remove(name);
             });
         }
@@ -41,9 +41,9 @@ namespace ThinkSharp.FeatureTouring.Navigation
         public IReleasable AddAction(string name, Action<Step> executeAction, Func<Step, bool> canExecuteAction)
         {
             if (executeAction == null)
-                throw new ArgumentNullException("executeAction");
+                throw new ArgumentNullException(nameof(executeAction));
             if (canExecuteAction == null)
-                throw new ArgumentNullException("canExecuteAction");
+                throw new ArgumentNullException(nameof(canExecuteAction));
 
             var execute = new ExecuteAction(executeAction);
             myExecuteActions[name] = execute;
@@ -54,12 +54,10 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
             return new ReleasableAction(() =>
             {
-                ExecuteAction executeStored;
-                if (myExecuteActions.TryGetValue(name, out executeStored) && executeStored == execute)
+                if (myExecuteActions.TryGetValue(name, out var executeStored) && executeStored == execute)
                     myExecuteActions.Remove(name);
 
-                CanExecuteAction canExecuteStored;
-                if (myCanExecuteActions.TryGetValue(name, out canExecuteStored) && canExecuteStored == canExecute)
+                if (myCanExecuteActions.TryGetValue(name, out var canExecuteStored) && canExecuteStored == canExecute)
                     myCanExecuteActions.Remove(name);
             });
         }
@@ -77,8 +75,7 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
         public void Execute(string name, Step step)
         {
-            ExecuteAction action;
-            if (!myExecuteActions.TryGetValue(name, out action))
+            if (!myExecuteActions.TryGetValue(name, out var action))
             {
                 Log.Debug("ActionRepository: Action '" + name + "' not available.");
                 return;
@@ -89,15 +86,14 @@ namespace ThinkSharp.FeatureTouring.Navigation
 
         public bool CanExecute(string name, Step step)
         {
-            CanExecuteAction canAction;
-            if (!myCanExecuteActions.TryGetValue(name, out canAction))
+            if (!myCanExecuteActions.TryGetValue(name, out var canAction))
                 return false;
 
             return canAction.Invoke(step);
         }
 
         // for unit testing
-        internal int ExecuteCount { get { return myExecuteActions.Count; } }
-        internal int CanExecuteCount { get { return myExecuteActions.Count; } }
+        internal int ExecuteCount => myExecuteActions.Count;
+        internal int CanExecuteCount => myExecuteActions.Count;
     }
 }

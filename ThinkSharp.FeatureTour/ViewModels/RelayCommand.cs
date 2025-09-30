@@ -1,5 +1,6 @@
 // Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 
 namespace ThinkSharp.FeatureTouring.ViewModels
@@ -40,12 +41,9 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     /// </param>
     public RelayCommand(Action<Object> execute, Predicate<Object> canExecute)
     {
-      if (execute == null)
-        throw new ArgumentNullException("execute can not be null.");
+        myExecute = execute ?? throw new ArgumentNullException("execute can not be null.");
 
-      this.myExecute = execute;
-
-      this.myCanExecute = canExecute;
+      myCanExecute = canExecute;
     }
 
     #endregion
@@ -67,7 +65,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     /// </returns>
     public override Boolean CanExecute(Object parameter)
     {
-        return this.myCanExecute(parameter);
+        return myCanExecute(parameter);
     }
 
     #endregion
@@ -83,7 +81,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
     /// </param>
     protected override void ExecuteInternal(Object parameter)
     {
-      this.myExecute(parameter);
+      myExecute(parameter);
     }
 
     #endregion

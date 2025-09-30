@@ -1,10 +1,7 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
@@ -36,8 +33,7 @@ namespace ThinkSharp.FeatureTouring.Helper
             {
                 var child = VisualTreeHelper.GetChild(depObj, i);
 
-                var result = child as T;
-                if (result != null && result.Name == name)
+                if (child is T result && result.Name == name)
                     return result;
 
                 result = GetChildOfType<T>(child);
@@ -56,8 +52,7 @@ namespace ThinkSharp.FeatureTouring.Helper
             if (parentObject == null) return null;
 
             //check if the parent matches the type we're looking for
-            T parent = parentObject as T;
-            if (parent != null)
+            if (parentObject is T parent)
                 return parent;
             return FindParent<T>(parentObject);
         }
@@ -77,7 +72,7 @@ namespace ThinkSharp.FeatureTouring.Helper
             if (app == null || app.Dispatcher == null)
                 return action();
             
-            return (TParam)app.Dispatcher.Invoke(action);
+            return app.Dispatcher.Invoke(action);
         }
     }
 }

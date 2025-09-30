@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ThinkSharp.FeatureTouring.Models;
 using ThinkSharp.FeatureTouring.Navigation;
+using ThinkSharp.FeatureTouring.ViewModels;
 
 // ReSharper disable MethodTooLong
 
@@ -32,7 +33,7 @@ namespace ThinkSharp.FeatureTouring.Test
         public void TestStepsEmpty()
         {
             var tour = new Tour();
-            tour.Steps = new Step[0];
+            tour.Steps = [];
             try
             {
                 var tourRun = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
@@ -48,7 +49,7 @@ namespace ThinkSharp.FeatureTouring.Test
         public void TestStepsContainsNullElements()
         {
             var tour = new Tour();
-            tour.Steps = new Step[] { null };
+            tour.Steps = [null];
             try
             {
                 var tourRun = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
@@ -64,7 +65,7 @@ namespace ThinkSharp.FeatureTouring.Test
         public void TestStepsContainsElementIdWithNull()
         {
             var tour = new Tour();
-            tour.Steps = new[] { new Step(null, "Header", "Content") };
+            tour.Steps = [new Step(null, "Header", "Content")];
             try
             {
                 var tourRun = new TourRun(tour, new VisualElementManagerMock(), new WindowManagerMock(), new PopupNavigatorMock());
@@ -80,11 +81,11 @@ namespace ThinkSharp.FeatureTouring.Test
         public void TestCompleteRun_2Steps()
         {
             var tour = new Tour();
-            tour.Steps = new[]
-            {
+            tour.Steps =
+            [
                 new Step("1", "Header1", "Content1"),
-                new Step("2", "Header2", "Content2"),
-            };
+                new Step("2", "Header2", "Content2")
+            ];
 
             var manager = new VisualElementManagerMock(tour.Steps);
             var windowManager = new WindowManagerMock();
@@ -111,11 +112,11 @@ namespace ThinkSharp.FeatureTouring.Test
         public void TestCompleteRun_2Steps_WithPreviouse()
         {
             var tour = new Tour();
-            tour.Steps = new[]
-            {
+            tour.Steps =
+            [
                 new Step("1", "Header1", "Content1"),
-                new Step("2", "Header2", "Content2"),
-            };
+                new Step("2", "Header2", "Content2")
+            ];
 
             var manager = new VisualElementManagerMock(tour.Steps);
             var windowManager = new WindowManagerMock();
@@ -149,11 +150,11 @@ namespace ThinkSharp.FeatureTouring.Test
         {
             var navigator = FeatureTour.GetNavigator();
             var tour = new Tour();
-            tour.Steps = new[]
-            {
+            tour.Steps =
+            [
                 new Step("1", "Header1", "Content1"),
-                new Step("2", "Header2", "Content2"),
-            };
+                new Step("2", "Header2", "Content2")
+            ];
 
             var manager = new VisualElementManagerMock(tour.Steps);
             var windowManager = new WindowManagerMock();
@@ -189,11 +190,11 @@ namespace ThinkSharp.FeatureTouring.Test
         {
             var navigator = FeatureTour.GetNavigator();
             var tour = new Tour();
-            tour.Steps = new[]
-            {
+            tour.Steps =
+            [
                 new Step("1", "Header1", "Content1", "ID1"),
-                new Step("2", "Header2", "Content2", "ID2"),
-            };
+                new Step("2", "Header2", "Content2", "ID2")
+            ];
 
             var manager = new VisualElementManagerMock(tour.Steps);
             var windowManager = new WindowManagerMock();
@@ -229,7 +230,7 @@ namespace ThinkSharp.FeatureTouring.Test
             AssertViewModelIsInitialized(tour.Steps[index], popupNavigator.ViewModel);
         }
 
-        private void AssertViewModelIsInitialized(Step step, ViewModels.TourViewModel tourViewModel)
+        private void AssertViewModelIsInitialized(Step step, TourViewModel tourViewModel)
         {
             Assert.AreEqual(step.Content, tourViewModel.Content);
             Assert.AreEqual(step.Header, tourViewModel.Header);

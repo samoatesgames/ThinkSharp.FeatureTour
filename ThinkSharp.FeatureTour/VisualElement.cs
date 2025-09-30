@@ -1,10 +1,7 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using ThinkSharp.FeatureTouring.Logging;
 
@@ -15,22 +12,11 @@ namespace ThinkSharp.FeatureTouring
     /// </summary>
     internal class VisualElement
     {
-#if NET40
         private readonly WeakReference myElement;
         public VisualElement(FrameworkElement element)
         {
             myElement = new WeakReference(element);
         }
-#endif
-
-#if NET45
-        private readonly WeakReference<FrameworkElement> myElement;
-        public VisualElement(FrameworkElement element)
-        {
-            myElement = new WeakReference<FrameworkElement>(element);
-
-        }
-#endif
 
         public string ElementID { get; set; }
         public Placement Placement { get; set; }
@@ -42,8 +28,7 @@ namespace ThinkSharp.FeatureTouring
             if (string.IsNullOrWhiteSpace(name))
                 return null;
 
-            FrameworkElement element;
-            if (TryGetElement(out element))
+            if (TryGetElement(out var element))
             {
                 var template = element.TryFindResource(name) as DataTemplate;
                 if (template == null)
@@ -56,14 +41,8 @@ namespace ThinkSharp.FeatureTouring
 
         public bool TryGetElement(out FrameworkElement element)
         {
-#if NET40
             element = myElement.Target as FrameworkElement;
             return myElement.IsAlive;
-#endif
-
-#if NET45
-            return myElement.TryGetTarget(out element);
-#endif
         }
     }
 }

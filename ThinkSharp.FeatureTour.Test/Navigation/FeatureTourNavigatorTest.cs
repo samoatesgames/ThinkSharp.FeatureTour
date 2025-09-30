@@ -1,11 +1,6 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using ThinkSharp.FeatureTouring.Models;
 using ThinkSharp.FeatureTouring.Navigation;
 using ThinkSharp.FeatureTouring.ViewModels;
@@ -17,30 +12,30 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
     {
         private class Counter
         {
-            public int entered1 = 0;
-            public int leaved1 = 0;
-            public int entered2 = 0;
-            public int leaved2 = 0;
-            public int closed = 0;
+            public int entered1;
+            public int leaved1;
+            public int entered2;
+            public int leaved2;
+            public int closed;
         }
 
         private class Doable
         {
-            public int do1 = 0;
-            public int do2 = 0;
-            public int do3 = 0;
+            public int do1;
+            public int do2;
+            public int do3;
         }
 
         [TestMethod]
         public void TestStepCount()
         {
             var tour = new Tour();
-            tour.Steps = new[]
-            {
+            tour.Steps =
+            [
                 new Step("1", "Header1", "Content1", "ID1"),
                 new Step("2", "Header2", "Content2", "ID2"),
-                new Step("3", "Header2", "Content2", "ID2"),
-            };
+                new Step("3", "Header2", "Content2", "ID2")
+            ];
 
             var manager = new VisualElementManagerMock(tour.Steps);
             var tourRun = new TourRun(tour, manager, new WindowManagerMock(), new PopupNavigatorMock());
@@ -92,11 +87,11 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
             navigator.OnClosed().Execute(s => c.closed++);
 
             var tour = new Tour();
-            tour.Steps = new[]
-            {
+            tour.Steps =
+            [
                 new Step("1", "Header1", "Content1", "ID1"),
-                new Step("2", "Header2", "Content2", "ID2"),
-            };
+                new Step("2", "Header2", "Content2", "ID2")
+            ];
 
             var manager = new VisualElementManagerMock(tour.Steps);
             var tourRun = new TourRun(tour, manager, new WindowManagerMock(), new PopupNavigatorMock());
@@ -125,13 +120,13 @@ namespace ThinkSharp.FeatureTouring.Test.Navigation
             navigator.ForStep("ID3").AttachDoable(s => d.do3++, s => false);
 
             var tour = new Tour();
-            tour.Steps = new[]
-            {
+            tour.Steps =
+            [
                 new Step("1", "Header1", "Content1", "ID1"),
                 new Step("2", "Header2", "Content2", "ID2"),
                 new Step("3", "Header3", "Content3", "ID3"),
-                new Step("4", "Header4", "Content4", "ID4"),
-            };
+                new Step("4", "Header4", "Content4", "ID4")
+            ];
 
             var manager = new VisualElementManagerMock(tour.Steps);
             var tourRun = new TourRun(tour, manager, new WindowManagerMock(), new PopupNavigatorMock());

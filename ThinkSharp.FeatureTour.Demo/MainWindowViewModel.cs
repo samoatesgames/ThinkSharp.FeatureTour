@@ -1,9 +1,10 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
-using CommunityToolkit.Mvvm.ComponentModel;
+
 using System;
 using System.Text;
 using System.Windows.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ThinkSharp.FeatureTouring.Navigation;
 using ThinkSharp.FeatureTouring.Touring;
@@ -188,44 +189,44 @@ namespace ThinkSharp.FeatureTouring
 
         public Placement Placement
         {
-            get { return _placement; }
-            set { SetProperty(ref _placement, value, "Placement"); }
+            get => _placement;
+            set => SetProperty(ref _placement, value);
         }
         
         public int ColorSchemaIndex
         {
-            get { return _colorSchemaIndex; }
-            set { SetProperty(ref _colorSchemaIndex, value, "ColorSchemaIndex"); }
+            get => _colorSchemaIndex;
+            set => SetProperty(ref _colorSchemaIndex, value);
         }
 
         public int TabIndex
         {
-            get { return _tabIndex; }
-            set { SetProperty(ref _tabIndex, value, "TabIndex"); }
+            get => _tabIndex;
+            set => SetProperty(ref _tabIndex, value);
         }
 
         public string Path
         {
-            get { return _path; }
-            set { SetProperty(ref _path, value, "Path"); }
+            get => _path;
+            set => SetProperty(ref _path, value);
         }
 
         public string Result
         {
-            get { return _result; }
-            set { SetProperty(ref _result, value, "Result"); }
+            get => _result;
+            set => SetProperty(ref _result, value);
         }
 
         public int SelectedIndex
         {
-            get { return _selectedIndex; }
-            set { SetProperty(ref _selectedIndex, value, "SelectedIndex"); }
+            get => _selectedIndex;
+            set => SetProperty(ref _selectedIndex, value);
         }
 
         public string StyleText
         {
-            get { return _styleText; }
-            set { SetProperty(ref _styleText, value, "StyleText"); }
+            get => _styleText;
+            set => SetProperty(ref _styleText, value);
         }
 
         public PopupStyle PopupStyle => myPopupStyle;

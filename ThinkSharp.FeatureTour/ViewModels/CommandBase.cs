@@ -1,5 +1,6 @@
 // Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -22,7 +23,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         protected CommandBase()
         {
-            this.InitializeMyClass();
+            InitializeMyClass();
         }
 
         #endregion
@@ -81,7 +82,7 @@ namespace ThinkSharp.FeatureTouring.ViewModels
             var lastCursor = Mouse.OverrideCursor;
             try
             {
-                this.ExecuteInternal(parameter);
+                ExecuteInternal(parameter);
             }
             finally
             {

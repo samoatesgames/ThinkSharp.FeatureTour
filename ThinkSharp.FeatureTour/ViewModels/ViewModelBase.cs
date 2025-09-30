@@ -1,5 +1,6 @@
 // Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -174,14 +175,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged
         {
-            add
-            {
-                this.myPropertyChanged += value;
-            }
-            remove
-            {
-                this.myPropertyChanged -= value;
-            }
+            add => myPropertyChanged += value;
+            remove => myPropertyChanged -= value;
         }
 
 
@@ -195,14 +190,8 @@ namespace ThinkSharp.FeatureTouring.ViewModels
         /// </summary>
         public event PropertyChangingEventHandler PropertyChanging
         {
-            add
-            {
-                this.myPropertyChanging += value;
-            }
-            remove
-            {
-                this.myPropertyChanging -= value;
-            }
+            add => myPropertyChanging += value;
+            remove => myPropertyChanging -= value;
         }
 
         #endregion

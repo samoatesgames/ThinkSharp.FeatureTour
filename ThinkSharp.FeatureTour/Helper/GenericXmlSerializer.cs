@@ -1,11 +1,9 @@
 ﻿// Copyright (c) Jan-Niklas Schäfer. All rights reserved.  
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -93,8 +91,7 @@ namespace ThinkSharp.FeatureTouring.Helper
         {
             lock (theSerializers)
             {
-                XmlSerializer serializer;
-                if (!theSerializers.TryGetValue(type, out serializer))
+                if (!theSerializers.TryGetValue(type, out var serializer))
                 {
                     serializer = new XmlSerializer(type, String.Empty);
                     theSerializers.Add(type, serializer);
